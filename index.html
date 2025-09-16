@@ -31,6 +31,7 @@
       --secondary-gradient: linear-gradient(135deg, #8e24aa 0%, #d81b60 100%);  
       --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);  
     }  
+  
     [data-theme="cosmic"] {  
       --primary-hue: 259; --primary-sat: 80%; --primary-light: 67%;  
       --bg-grad-1: #00000c; --bg-grad-2: #0c001e; --bg-grad-3: #110729;  
@@ -43,6 +44,7 @@
       --border-color: rgba(87, 72, 138, 0.7);  
       --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);  
     }  
+  
     [data-theme="golden"] {  
       --primary-hue: 39; --primary-sat: 100%; --primary-light: 50%;  
       --bg-grad-1: #fff8e1; --bg-grad-2: #ffecb3; --bg-grad-3: #fff3e0;  
@@ -55,6 +57,7 @@
       --border-color: rgba(255, 224, 178, 0.7);  
       --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 100%, 60%) 0%, #fb8c00 100%);  
     }  
+  
     [data-theme="biolume"] {  
       --primary-hue: 188; --primary-sat: 78%; --primary-light: 47%;  
       --bg-grad-1: #001c22; --bg-grad-2: #00313a; --bg-grad-3: #012a30;  
@@ -68,6 +71,7 @@
       --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 85%, 55%) 0%, #4dd0e1 100%);  
       --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);  
     }  
+  
     [data-theme="neko"] {  
       --primary-hue: 337; --primary-sat: 78%; --primary-light: 50%;  
       --bg-grad-1: #fce4ec; --bg-grad-2: #f8bbd0; --bg-grad-3: #fce4ec;  
@@ -188,63 +192,133 @@
       left: 0;  
       width: 100%;  
       z-index: 999;  
+  
+      /* Mobile-friendly: stack content center */  
       display: flex;  
       flex-direction: column;  
+      align-items: center;  
       gap: 1rem;  
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
+  
       padding: 1rem;  
       border: 1px solid var(--border-color);  
       backdrop-filter: blur(var(--surface-blur));  
       border-radius: 0 0 var(--radius-lg) var(--radius-lg);  
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
     }  
-    .main-header .header-content {  
+    @media (min-width: 900px) {  
+      /* Desktop: put logo on the left, controls on the right */  
+      .main-header {  
+        flex-direction: row;  
+        justify-content: space-between;  
+      }  
+    }  
+  
+    .header-content {  
       display: flex;  
       align-items: center;  
-      justify-content: center;  
       gap: 1rem;  
+      justify-content: center;  
     }  
-    .main-header .header-content .header-card__logo {  
+    @media (min-width: 900px) {  
+      .header-content {  
+        justify-content: flex-start;  
+      }  
+    }  
+    .header-card__logo {  
       width: 54px;  
       height: 54px;  
       margin-bottom: 0;  
+      transition: filter 0.3s ease;  
+      animation: float-breath 6s ease-in-out infinite;  
     }  
-    .main-header .header-content .header-card__title {  
+    @media (min-width: 900px) {  
+      .header-card__logo {  
+        width: 80px;  
+        height: 80px;  
+      }  
+    }  
+    .header-card__title {  
       font-size: 1.4rem;  
       background: var(--primary-gradient);  
       -webkit-background-clip: text;  
       -webkit-text-fill-color: transparent;  
     }  
-    .header-controls {  
-      display: flex;  
-      flex-wrap: wrap;  
-      gap: 1rem;  
-      justify-content: center;  
-    }  
-    /* Larger screens: row layout for header */  
     @media (min-width: 900px) {  
-      .main-header {  
-        flex-direction: row;  
-        align-items: center;  
-        justify-content: space-between;  
-      }  
-      .main-header .header-content {  
-        justify-content: flex-start;  
-      }  
-      .main-header .header-content .header-card__logo {  
-        width: 80px;  
-        height: 80px;  
-      }  
-      .main-header .header-content .header-card__title {  
+      .header-card__title {  
         font-size: 1.8rem;  
       }  
+    }  
+    .main-header:hover .header-card__logo {  
+      filter: drop-shadow(0 8px 30px hsla(var(--primary-hue), 50%, 50%, 0.4));  
+    }  
+  
+    /* Mobile Toggle Button */  
+    .header-toggle {  
+      background: var(--primary-gradient);  
+      color: #fff;  
+      border: none;  
+      font-weight: 600;  
+      border-radius: 8px;  
+      padding: 0.5rem 1rem;  
+      cursor: pointer;  
+      transition: background-color 0.3s ease, transform 0.2s ease;  
+    }  
+    .header-toggle:hover {  
+      transform: translateY(-2px);  
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);  
+    }  
+    .header-toggle:active:hover {  
+      transform: translateY(0);  
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
+    }  
+    @media (min-width: 900px) {  
+      /* Hidden on desktop */  
+      .header-toggle {  
+        display: none;  
+      }  
+    }  
+  
+    /* The expanded menu (theme + history) */  
+    .header-controls {  
+      /* Hidden by default on mobile */  
+      overflow: hidden;  
+      max-height: 0;  
+      opacity: 0;  
+      pointer-events: none;  
+      transition: max-height 0.35s ease, opacity 0.35s ease;  
+  
+      display: flex;  
+      flex-direction: column;  
+      gap: 1rem;  
+      align-items: center;  
+      padding: 0 1rem; /* A bit of side padding for mobile swatches */  
+    }  
+    .header-controls.show {  
+      max-height: 700px; /* Increase for more breathing space */  
+      opacity: 1;  
+      pointer-events: auto;  
+      padding: 1rem;  
+    }  
+    @media (min-width: 900px) {  
+      /* Always visible on desktop; ensure full visibility */  
       .header-controls {  
-        justify-content: flex-end;  
+        overflow: visible !important;  
+        max-height: none !important;  
+        opacity: 1 !important;  
+        pointer-events: auto !important;  
+        flex-direction: row;  
+        align-items: center;  
+        gap: 1rem;  
+        padding: 0;  
+      }  
+      .header-controls.show {  
+        padding: 0; /* In desktop, no extra needed */  
       }  
     }  
   
     /* Margin top to prevent content from hiding behind the fixed header */  
     .main-content {  
-      margin-top: 11rem; /* Adjust as needed based on header size */  
+      margin-top: 11rem; /* Enough space for mobile header */  
       display: block;  
       max-width: 1200px;  
       margin-inline: auto;  
@@ -252,7 +326,7 @@
     }  
     @media (min-width: 900px) {  
       .main-content {  
-        margin-top: 8rem;  
+        margin-top: 8rem; /* Enough space for desktop header */  
       }  
     }  
   
@@ -369,16 +443,6 @@
         transform: translateY(-8px) scale(1.05);  
         filter: drop-shadow(0 8px 25px var(--shadow-color));  
       }  
-    }  
-    .header-card__logo {  
-      transition: filter 0.3s ease;  
-      animation: float-breath 6s ease-in-out infinite;  
-    }  
-    .header-card__logo stop {  
-      transition: stop-color 0.4s ease;  
-    }  
-    .main-header:hover .header-card__logo {  
-      filter: drop-shadow(0 8px 30px hsla(var(--primary-hue), 50%, 50%, 0.4));  
     }  
   
     /* ------------------------------  
@@ -507,6 +571,7 @@
       cursor: pointer;  
       transition: all 0.2s ease;  
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);  
+      position: relative; /* So we can place a checkmark for the active theme */  
     }  
     .theme-swatch:hover {  
       transform: scale(1.15);  
@@ -516,6 +581,24 @@
       border-color: var(--primary-color);  
       transform: scale(1.1);  
       box-shadow: 0 0 0 3px var(--primary-color);  
+    }  
+    /* Add a checkmark to the active theme */  
+    .theme-swatch.active::after {  
+      content: "✓";  
+      position: absolute;  
+      top: -8px;  
+      right: -8px;  
+      width: 24px;  
+      height: 24px;  
+      background-color: var(--primary-color);  
+      border-radius: 50%;  
+      display: flex;  
+      align-items: center;  
+      justify-content: center;  
+      color: #fff;  
+      font-weight: 600;  
+      box-shadow: 0 0 0 2px var(--surface-color);  
+      transition: transform 0.2s ease;  
     }  
   
     /* ------------------------------  
@@ -805,31 +888,32 @@
         </defs>  
         <circle cx="50" cy="50" r="40" fill="url(#orbGradient)" />  
       </svg>  
+  
       <h1 class="header-card__title">m00d matrix</h1>  
+      <!-- Mobile Toggle Button (Hidden on desktop) -->  
+      <button class="header-toggle" data-action="toggle-header-controls" aria-label="Expand Menu">  
+        Menu ☰  
+      </button>  
     </div>  
   
-    <!-- Theme Switcher & History Button -->  
+    <!-- Theme Switcher & History Button (Expandable on mobile, always visible on desktop) -->  
     <div class="header-controls">  
       <div class="theme-switcher" id="theme-switcher">  
         <button class="theme-swatch" data-theme="magic"  
-          style="background: linear-gradient(135deg, #0288d1, #039be5);"  
-          aria-label="Serene Sky Theme" title="Serene Sky"></button>  
-  
+                style="background: linear-gradient(135deg, #0288d1, #039be5);"  
+                aria-label="Serene Sky Theme" title="Serene Sky"></button>  
         <button class="theme-swatch" data-theme="cosmic"  
-          style="background: linear-gradient(135deg, #8b5cf6, #a855f7);"  
-          aria-label="Cosmic Rift Theme" title="Cosmic Rift"></button>  
-  
+                style="background: linear-gradient(135deg, #8b5cf6, #a855f7);"  
+                aria-label="Cosmic Rift Theme" title="Cosmic Rift"></button>  
         <button class="theme-swatch" data-theme="golden"  
-          style="background: linear-gradient(135deg, #ff8f00, #fb8c00);"  
-          aria-label="Golden Hour Theme" title="Golden Hour"></button>  
-  
+                style="background: linear-gradient(135deg, #ff8f00, #fb8c00);"  
+                aria-label="Golden Hour Theme" title="Golden Hour"></button>  
         <button class="theme-swatch" data-theme="biolume"  
-          style="background: linear-gradient(135deg, #22b8cf, #4dd0e1);"  
-          aria-label="Biolume Theme" title="Biolume"></button>  
-  
+                style="background: linear-gradient(135deg, #22b8cf, #4dd0e1);"  
+                aria-label="Biolume Theme" title="Biolume"></button>  
         <button class="theme-swatch" data-theme="neko"  
-          style="background: linear-gradient(135deg, #d81b60, #f06292);"  
-          aria-label="Neko Spark Theme" title="Neko Spark"></button>  
+                style="background: linear-gradient(135deg, #d81b60, #f06292);"  
+                aria-label="Neko Spark Theme" title="Neko Spark"></button>  
       </div>  
       <button class="button button--primary" data-action="show-history">View History & Insights</button>  
     </div>  
@@ -990,6 +1074,7 @@
             const amMood = dayData.AM?.mood || '·';  
             const pmMood = dayData.PM?.mood || '·';  
             const isSelectedClass = dayString === this.state.selectedDate ? 'week-calendar__day--selected' : '';  
+  
             html += `  
               <td class="week-calendar__day ${isSelectedClass}" data-date="${dayString}">  
                 <div class="week-calendar__date">${d.getDate()}</div>  
@@ -1010,6 +1095,7 @@
           const { selectedDate, period } = this.state;  
           const entry = this.state.moodHistory[selectedDate]?.[period];  
           const currentMood = this.config.moods.find(m => m.emoji === entry?.mood);  
+  
           this.dom.moodDescription.textContent = currentMood?.desc || 'Select a mood below';  
           this.dom.moodNote.value = entry?.note || '';  
           this.dom.emojisContainer.querySelectorAll('.mood-selector__button').forEach(btn => {  
@@ -1018,7 +1104,9 @@
         },  
   
         updateThemeUI() {  
+          // Sync the <html> data-theme  
           document.documentElement.dataset.theme = this.state.theme;  
+          // Mark active swatch  
           this.dom.themeSwitcher.querySelectorAll('.theme-swatch').forEach(btn => {  
             btn.classList.toggle('active', btn.dataset.theme === this.state.theme);  
           });  
@@ -1063,6 +1151,7 @@
             return;  
           }  
   
+          // Build container for each chart tab  
           this.dom.historyChartsContainer.innerHTML = Object.keys(chartConfigs).map(key => `  
             <div class="chart-panel ${this.state.historyViewState.activeChartTab === key ? 'active' : ''}"  
                  id="${key}-panel" data-tab-panel="${key}">  
@@ -1078,6 +1167,7 @@
           const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary');  
           const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');  
   
+          // Clean up existing charts  
           Object.values(this.state.charts).forEach(chart => chart.destroy());  
   
           // --- Chart 1: 30-Day Trend ---  
@@ -1113,11 +1203,14 @@
                   min: 0.5, max: 4.5,  
                   ticks: {  
                     stepSize: 1, color: textColor,  
-                    callback: (val) => scoreMap.get(val)?.emoji || ''  
+                    callback: val => scoreMap.get(val)?.emoji || ''  
                   },  
                   grid: { color: gridColor }  
                 },  
-                x: { ticks: { color: textColor }, grid: { color: gridColor } }  
+                x: {  
+                  ticks: { color: textColor },  
+                  grid: { color: gridColor }  
+                }  
               },  
               plugins: {  
                 legend: { display: false },  
@@ -1134,7 +1227,7 @@
           });  
   
           // --- Chart 2: Mood Frequency ---  
-          const moodCounts = this.config.moods.map(m => ({ ...m, count: 0 })).reverse(); // reversed for bar chart order  
+          const moodCounts = this.config.moods.map(m => ({ ...m, count: 0 })).reverse();  
           allEntries.forEach(e => {  
             const mood = moodCounts.find(m => m.emoji === e.mood);  
             if (mood) mood.count++;  
@@ -1155,7 +1248,9 @@
             options: {  
               indexAxis: 'y',  
               scales: {  
-                y: { ticks: { color: textColor } },  
+                y: {  
+                  ticks: { color: textColor }  
+                },  
                 x: {  
                   grid: { color: gridColor },  
                   ticks: { color: textColor },  
@@ -1205,7 +1300,7 @@
                   ticks: {  
                     stepSize: 1, color: textColor,  
                     backdropColor: 'transparent',  
-                    callback: (val) => scoreMap.get(val)?.emoji || ''  
+                    callback: val => scoreMap.get(val)?.emoji || ''  
                   }  
                 }  
               },  
@@ -1255,7 +1350,7 @@
                   grid: { color: gridColor },  
                   ticks: {  
                     stepSize: 1, color: textColor,  
-                    callback: (val) => scoreMap.get(val)?.emoji || ''  
+                    callback: val => scoreMap.get(val)?.emoji || ''  
                   }  
                 },  
                 x: { ticks: { color: textColor } }  
@@ -1264,7 +1359,7 @@
                 legend: { display: false },  
                 tooltip: {  
                   callbacks: {  
-                    label: (ctx) => ` Average Score: ${ctx.parsed.y.toFixed(2)}`  
+                    label: ctx => ` Average Score: ${ctx.parsed.y.toFixed(2)}`  
                   }  
                 }  
               }  
@@ -1324,13 +1419,13 @@
           this.dom.historyBody.innerHTML = tableHTML;  
   
           let paginationHTML = `  
-            <div class="pagination-status">  
-              Showing ${startIndex + 1}-${Math.min(startIndex + itemsPerPage, allDays.length)} of ${allDays.length} days  
-            </div>  
-            <div class="pagination-buttons">  
-              <button class="button" data-action="prev-page" ${currentPage === 1 ? 'disabled' : ''}>&larr; Prev</button>  
-              <button class="button" data-action="next-page" ${currentPage >= totalPages ? 'disabled' : ''}>Next &rarr;</button>  
-            </div>`;  
+              <div class="pagination-status">  
+                Showing ${startIndex + 1}-${Math.min(startIndex + itemsPerPage, allDays.length)} of ${allDays.length} days  
+              </div>  
+              <div class="pagination-buttons">  
+                <button class="button" data-action="prev-page" ${currentPage === 1 ? 'disabled' : ''}>&larr; Prev</button>  
+                <button class="button" data-action="next-page" ${currentPage >= totalPages ? 'disabled' : ''}>Next &rarr;</button>  
+              </div>`;  
           this.dom.paginationControls.innerHTML = totalPages > 1 ? paginationHTML : '';  
         },  
   
@@ -1385,12 +1480,20 @@
             case 'switch-chart-tab': {  
               const tab = target.dataset.tab;  
               this.state.historyViewState.activeChartTab = tab;  
+  
               this.dom.chartTabsContainer.querySelectorAll('.chart-tabs__button').forEach(btn => btn.classList.remove('active'));  
               target.classList.add('active');  
+  
               this.dom.historyChartsContainer.querySelectorAll('.chart-panel').forEach(panel => panel.classList.remove('active'));  
               document.getElementById(`${tab}-panel`).classList.add('active');  
-              // To fix sizing issues in Canvas once hidden  
+  
+              // Re-render the charts to fix sizing issues after hide/show  
               this.renderHistoryCharts();  
+              break;  
+            }  
+            case 'toggle-header-controls': {  
+              // Expand/collapse the theme & history controls on mobile  
+              document.querySelector('.header-controls').classList.toggle('show');  
               break;  
             }  
           }  
@@ -1462,8 +1565,10 @@
           this.state.moodHistory[selectedDate][period][key] = value;  
   
           // Clean up if user removes mood+note entirely  
-          if (!this.state.moodHistory[selectedDate][period].mood &&  
-              !(this.state.moodHistory[selectedDate][period].note || '').trim()) {  
+          if (  
+            !this.state.moodHistory[selectedDate][period].mood &&  
+            !(this.state.moodHistory[selectedDate][period].note || '').trim()  
+          ) {  
             delete this.state.moodHistory[selectedDate][period];  
             if (Object.keys(this.state.moodHistory[selectedDate]).length === 0) {  
               delete this.state.moodHistory[selectedDate];  
