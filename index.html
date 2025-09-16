@@ -81,7 +81,7 @@
             font-family: var(--font-family);
             background: linear-gradient(125deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));
             background-size: 200% 200%; color: var(--text-primary);
-            margin: 0; padding: 2rem; min-height: 100vh;
+            margin: 0; padding: 1.5rem 1rem; min-height: 100vh;
             animation: gradientMagic 20s ease infinite;
             transition: background 0.8s ease, color 0.8s ease;
         }
@@ -94,22 +94,24 @@
 
         #blob-container { position: fixed; top: 50%; left: 50%; width: 100%; height: 100%; transform: translate(-50%, -50%); z-index: -1; overflow: hidden; pointer-events: none; }
         .blob { position: absolute; border-radius: 50%; opacity: 0.6; filter: blur(100px); will-change: transform; transform: translate(var(--x, 0px), var(--y, 0px)); }
-        .blob:nth-child(1) { width: 40vw; height: 40vw; min-width: 300px; min-height: 300px; top: 0; left: 0; background: hsla(var(--primary-hue), var(--primary-sat), calc(var(--primary-light) + 10%), 0.5); animation: move-blob-1 25s infinite alternate ease-in-out; }
-        .blob:nth-child(2) { width: 30vw; height: 30vw; min-width: 250px; min-height: 250px; top: 50%; left: 60%; background: hsla(calc(var(--primary-hue) + 120), var(--primary-sat), var(--primary-light), 0.5); animation: move-blob-2 30s infinite alternate ease-in-out; }
-        .blob:nth-child(3) { width: 25vw; height: 25vw; min-width: 200px; min-height: 200px; top: 60%; left: 10%; background: hsla(calc(var(--primary-hue) - 120), var(--primary-sat), var(--primary-light), 0.4); animation: move-blob-3 22s infinite alternate ease-in-out; }
+        .blob:nth-child(1) { width: 80vmin; height: 80vmin; top: -10%; left: -10%; background: hsla(var(--primary-hue), var(--primary-sat), calc(var(--primary-light) + 10%), 0.5); animation: move-blob-1 25s infinite alternate ease-in-out; }
+        .blob:nth-child(2) { width: 60vmin; height: 60vmin; top: 50%; left: 60%; background: hsla(calc(var(--primary-hue) + 120), var(--primary-sat), var(--primary-light), 0.5); animation: move-blob-2 30s infinite alternate ease-in-out; }
+        .blob:nth-child(3) { width: 50vmin; height: 50vmin; top: 60%; left: 10%; background: hsla(calc(var(--primary-hue) - 120), var(--primary-sat), var(--primary-light), 0.4); animation: move-blob-3 22s infinite alternate ease-in-out; }
         @keyframes move-blob-1 { to { transform: translate(var(--x), var(--y)) scale(1.2) translate(-20vw, 15vh) rotate(180deg); } }
         @keyframes move-blob-2 { to { transform: translate(var(--x), var(--y)) scale(0.8) translate(15vw, 20vh) rotate(-180deg); } }
         @keyframes move-blob-3 { to { transform: translate(var(--x), var(--y)) scale(1.1) translate(20vw, -25vh) rotate(90deg); } }
 
-        .layout { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 1200px; margin-inline: auto; }
-        @media (min-width: 900px) { .layout { grid-template-columns: 1fr 320px; } }
-        .layout__main, .layout__sidebar { display: grid; gap: 2rem; align-content: start; }
+        .layout { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 1200px; margin-inline: auto; }
+        @media (min-width: 900px) { .layout { grid-template-columns: 1fr 320px; gap: 2rem; padding: 2rem; } }
+        .layout__main, .layout__sidebar { display: grid; gap: 1.5rem; align-content: start; }
+        @media (min-width: 900px) { .layout__main, .layout__sidebar { gap: 2rem; } }
 
-        .card { background-color: var(--surface-color); backdrop-filter: blur(var(--surface-blur)); border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 2rem; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease; contain: layout style; }
+        .card { background-color: var(--surface-color); backdrop-filter: blur(var(--surface-blur)); border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease; contain: layout style; }
         .card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px var(--shadow-color); }
-        .card__title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card__title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .button { display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 8px; padding: 0.75rem 1.5rem; font: 500 0.9rem/1 var(--font-family); cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .button { display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 8px; padding: 0.75rem 1.5rem; font: 500 0.9rem/1 var(--font-family); cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%; }
+        @media (min-width: 900px) { .button { width: auto; } }
         .button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .button:active:not(:disabled) { transform: translateY(0); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .button:disabled { cursor: not-allowed; opacity: 0.6; }
@@ -124,12 +126,14 @@
         
         @keyframes float-breath { 0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 5px 15px var(--shadow-color)); } 50% { transform: translateY(-8px) scale(1.05); filter: drop-shadow(0 8px 25px var(--shadow-color)); } }
         .header-card { text-align: center; position: relative; overflow: hidden; }
-        .header-card__logo { width: 100px; height: 100px; margin-bottom: 0.5rem; transition: filter 0.3s ease; animation: float-breath 6s ease-in-out infinite; }
+        .header-card__logo { width: 80px; height: 80px; margin-bottom: 0.5rem; transition: filter 0.3s ease; animation: float-breath 6s ease-in-out infinite; }
+        @media (min-width: 900px) { .header-card__logo { width: 100px; height: 100px; } }
         .header-card__logo stop { transition: stop-color 0.4s ease; }
         .header-card:hover .header-card__logo { filter: drop-shadow(0 8px 30px hsla(var(--primary-hue), 50%, 50%, 0.4)); }
-        .header-card__title { font-size: 2rem; letter-spacing: -1px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-card__title { font-size: 1.8rem; letter-spacing: -1px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @media (min-width: 900px) { .header-card__title { font-size: 2rem; } }
 
-        .date-navigator { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+        .date-navigator { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
         .period-toggle { display: flex; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: border-color 0.4s ease; }
         .period-toggle__label { padding: 8px 16px; cursor: pointer; color: var(--text-secondary); transition: all 0.3s ease; }
         .period-toggle__input { display: none; }
@@ -143,9 +147,11 @@
         .week-calendar__dots { font-size: 0.8rem; min-height: 1em; margin-top: 4px; color: var(--text-secondary); }
 
         .mood-selector { text-align: center; }
-        .mood-selector__prompt { font-size: 1.25rem; font-weight: 600; color: var(--primary-color); min-height: 1.25em; margin: 0.5rem 0 1.5rem; }
+        .mood-selector__prompt { font-size: 1.1rem; font-weight: 600; color: var(--primary-color); min-height: 1.1em; margin: 0.5rem 0 1rem; }
+        @media (min-width: 900px) { .mood-selector__prompt { font-size: 1.25rem; min-height: 1.25em; margin: 0.5rem 0 1.5rem; } }
         .mood-selector__emojis { display: flex; justify-content: space-around; }
-        .mood-selector__button { font-size: 3rem; background: none; border: none; padding: 0.5rem; cursor: pointer; border-radius: 50%; transition: transform 0.2s, background-color 0.2s; }
+        .mood-selector__button { font-size: 2.5rem; background: none; border: none; padding: 0.5rem; cursor: pointer; border-radius: 50%; transition: transform 0.2s, background-color 0.2s; }
+        @media (min-width: 900px) { .mood-selector__button { font-size: 3rem; } }
         .mood-selector__button:hover { transform: scale(1.15); }
         .mood-selector__button--selected { background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.2); transform: scale(1.1); }
         
@@ -155,12 +161,14 @@
         .theme-swatch.active { border-color: var(--primary-color); transform: scale(1.1); box-shadow: 0 0 0 3px var(--primary-color); }
 
         /* --- Dialog (Modal) Styles --- */
-        .dialog { border: none; border-radius: var(--radius-lg); box-shadow: 0 10px 30px var(--shadow-color); padding: 0; width: 90%; max-width: 800px; max-height: 90vh; background-color: var(--surface-color); backdrop-filter: blur(var(--surface-blur)); border: 1px solid var(--border-color); }
+        .dialog { border: none; border-radius: var(--radius-lg); box-shadow: 0 10px 30px var(--shadow-color); padding: 0; width: 95%; max-width: 800px; max-height: 90vh; background-color: var(--surface-color); backdrop-filter: blur(var(--surface-blur)); border: 1px solid var(--border-color); }
         .dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
         .dialog[open] { display: grid; grid-template-rows: auto auto 1fr auto; animation: fadeIn 0.3s ease-out; }
-        .dialog__header, .dialog__body, .dialog__footer { padding: 1.5rem 2rem; }
+        .dialog__header, .dialog__body, .dialog__footer { padding: 1rem 1.5rem; }
+        @media (min-width: 900px) { .dialog__header, .dialog__body, .dialog__footer { padding: 1.5rem 2rem; } }
         .dialog__header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-        .dialog__title { font-size: 1.5rem; }
+        .dialog__title { font-size: 1.25rem; }
+        @media (min-width: 900px) { .dialog__title { font-size: 1.5rem; } }
         .dialog__close { font-size: 2rem; background: none; border: none; cursor: pointer; color: var(--text-secondary); line-height: 1; transition: color 0.2s, transform 0.2s; }
         .dialog__close:hover { color: var(--primary-color); transform: rotate(90deg); }
         .dialog__body { overflow-y: auto; color: var(--text-primary); padding-top: 0; padding-bottom: 0; }
@@ -168,18 +176,22 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
         /* --- History & Chart Styles --- */
-        .chart-tabs { display: flex; gap: 0.25rem; padding: 1rem 2rem 0; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
-        .chart-tabs__button { padding: 0.75rem 1rem; border: none; background-color: transparent; border-radius: 8px 8px 0 0; cursor: pointer; font-family: var(--font-family); font-size: 0.9rem; color: var(--text-secondary); transition: all 0.2s ease; border-bottom: 3px solid transparent; }
+        .chart-tabs { display: flex; gap: 0.25rem; padding: 1rem 1.5rem 0; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        @media (min-width: 900px) { .chart-tabs { padding: 1rem 2rem 0; } }
+        .chart-tabs__button { padding: 0.75rem 0.5rem; border: none; background-color: transparent; border-radius: 8px 8px 0 0; cursor: pointer; font-family: var(--font-family); font-size: 0.8rem; color: var(--text-secondary); transition: all 0.2s ease; border-bottom: 3px solid transparent; flex-grow: 1; text-align: center; white-space: nowrap; }
+        @media (min-width: 900px) { .chart-tabs__button { font-size: 0.9rem; padding: 0.75rem 1rem; flex-grow: 0; } }
         .chart-tabs__button:hover { background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1); }
         .chart-tabs__button.active { font-weight: 600; color: var(--primary-color); border-bottom-color: var(--primary-color); }
-        .chart-panel { padding: 2rem; display: none; }
+        .chart-panel { padding: 1.5rem; display: none; }
+        @media (min-width: 900px) { .chart-panel { padding: 2rem; } }
         .chart-panel.active { display: block; animation: fadeIn 0.4s; }
         .chart-container { position: relative; max-width: 500px; margin-inline: auto; }
         .chart-title { text-align: center; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-secondary); }
         .chart-explanation { font-size: 0.75rem; color: var(--text-secondary); text-align: center; margin-top: 0.75rem; max-width: 350px; margin-inline: auto; line-height: 1.4; }
         
         .history-table { width: 100%; border-collapse: collapse; }
-        .history-table th, .history-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .history-table th, .history-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; font-size: 0.9rem; }
+        @media (min-width: 900px) { .history-table th, .history-table td { font-size: 1rem; } }
         .history-table th { font-weight: 600; user-select: none; }
         .history-table th[data-sort]:hover { background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1); cursor: pointer; }
         .history-table th.sort-active { color: var(--primary-color); }
@@ -189,13 +201,15 @@
         .history-table tr.entry-row.notes-visible { background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1); }
         .history-table tr.notes-row { display: none; }
         .history-table .notes-content { padding: 1rem; white-space: pre-wrap; word-break: break-word; background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.05); }
-        .history-table .notes-content p { margin: 0 0 0.5rem; }
+        .history-table .notes-content p { margin: 0 0 0.5rem; font-size: 0.9rem; }
         .history-table .notes-content p:last-child { margin-bottom: 0; }
         .history-table .mood-emoji { font-size: 1.5rem; }
         
-        .pagination-controls { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); }
+        .pagination-controls { padding: 1rem 1.5rem; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); gap: 0.75rem; }
+        @media (min-width: 900px) { .pagination-controls { flex-direction: row; padding: 1rem 2rem; } }
         .pagination-status { font-size: 0.9rem; color: var(--text-secondary); }
         .pagination-buttons { display: flex; gap: 0.5rem; }
+        .pagination-buttons .button { width: auto; }
 
         .csv-preview { background-color: hsla(var(--primary-hue), 5%, 50%, 0.1); border-radius: var(--radius-md); padding: 1rem; font-family: monospace; font-size: 0.8rem; white-space: pre; overflow-x: auto; max-height: 200px; border: 1px solid var(--border-color); }
     </style>
@@ -233,8 +247,8 @@
         <div class="layout__sidebar">
             <div class="card header-card">
                  <svg class="header-card__logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <defs><radialGradient id="orbGradient" cx="40%" cy="40%" r="60%"><stop offset="0%" style="stop-color: hsla(var(--primary-hue), var(--primary-sat), 80%, 1);" /><stop offset="100%" style="stop-color: var(--primary-color);" /></radialGradient></defs>
-                    <circle cx="50" cy="50" r="40" fill="url(#orbGradient)" />
+                     <defs><radialGradient id="orbGradient" cx="40%" cy="40%" r="60%"><stop offset="0%" style="stop-color: hsla(var(--primary-hue), var(--primary-sat), 80%, 1);" /><stop offset="100%" style="stop-color: var(--primary-color);" /></radialGradient></defs>
+                     <circle cx="50" cy="50" r="40" fill="url(#orbGradient)" />
                  </svg>
                  <h1 class="header-card__title">m00d matrix</h1>
             </div>
