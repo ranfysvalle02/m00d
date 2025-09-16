@@ -284,6 +284,16 @@
     @media (min-width: 900px) {
       .main-content { margin-top: 8rem; }
     }
+    .privacy-link {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .privacy-link:hover {
+        color: var(--primary-color);
+        text-decoration: underline;
+    }
 
     /* 4. Cards */
     .card {
@@ -793,7 +803,6 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
-
   </style>
 </head>
 <body>
@@ -851,6 +860,9 @@
     <div class="card">
       <h2 class="card__title">m00d note</h2>
       <textarea id="mood-note" class="form-input" rows="5" placeholder="What's on your mind? What are you grateful for?"></textarea>
+    </div>
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <a href="privacy.html" target="_blank" class="privacy-link">Privacy Policy</a>
     </div>
   </main>
   

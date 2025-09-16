@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="magic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | m00d matrix</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0288d1"/>
+  
+  <style>
+    :root, [data-theme="magic"] {
+      --primary-hue: 207; --primary-sat: 96%; --primary-light: 41%;
+      --bg-grad-1: #e0f7fa; --bg-grad-2: #e1f5fe; --bg-grad-3: #e8eaf6;
+      --surface-color: rgba(255, 255, 255, 0.6);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --surface-blur: 10px;
+      --particle-color: rgba(2, 136, 209, 0.5);
+      --text-primary: #0d47a1;
+      --text-secondary: #1565c0;
+      --border-color: rgba(179, 229, 252, 0.7);
+      --primary-color: hsl(var(--primary-hue), var(--primary-sat), var(--primary-light));
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 80%, 55%) 0%, #039be5 100%);
+      --secondary-gradient: linear-gradient(135deg, #8e24aa 0%, #d81b60 100%);
+      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);
+    }
+  
+    [data-theme="cosmic"] {
+      --primary-hue: 259; --primary-sat: 80%; --primary-light: 67%;
+      --bg-grad-1: #00000c; --bg-grad-2: #0c001e; --bg-grad-3: #110729;
+      --surface-color: rgba(20, 15, 35, 0.65);
+      --input-bg: rgba(20, 15, 35, 0.85);
+      --surface-blur: 12px;
+      --particle-color: rgba(139, 92, 246, 0.5);
+      --text-primary: #e3e4fa;
+      --text-secondary: #a4a6f9;
+      --border-color: rgba(87, 72, 138, 0.7);
+      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);
+    }
+  
+    [data-theme="golden"] {
+      --primary-hue: 39; --primary-sat: 100%; --primary-light: 50%;
+      --bg-grad-1: #fff8e1; --bg-grad-2: #ffecb3; --bg-grad-3: #fff3e0;
+      --surface-color: rgba(255, 250, 237, 0.6);
+      --input-bg: rgba(255, 250, 237, 0.8);
+      --surface-blur: 10px;
+      --particle-color: rgba(255, 143, 0, 0.5);
+      --text-primary: #4e342e;
+      --text-secondary: #8d6e63;
+      --border-color: rgba(255, 224, 178, 0.7);
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 100%, 60%) 0%, #fb8c00 100%);
+    }
+  
+    [data-theme="biolume"] {
+      --primary-hue: 188; --primary-sat: 78%; --primary-light: 47%;
+      --bg-grad-1: #001c22; --bg-grad-2: #00313a; --bg-grad-3: #012a30;
+      --surface-color: rgba(5, 45, 55, 0.65);
+      --input-bg: rgba(5, 45, 55, 0.85);
+      --surface-blur: 14px;
+      --particle-color: rgba(34, 184, 207, 0.5);
+      --text-primary: #c5f6fa;
+      --text-secondary: #66d9e8;
+      --border-color: rgba(38, 78, 69, 0.7);
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 85%, 55%) 0%, #4dd0e1 100%);
+      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);
+    }
+  
+    [data-theme="neko"] {
+      --primary-hue: 337; --primary-sat: 78%; --primary-light: 50%;
+      --bg-grad-1: #fce4ec; --bg-grad-2: #f8bbd0; --bg-grad-3: #fce4ec;
+      --surface-color: rgba(255, 240, 245, 0.65);
+      --input-bg: rgba(255, 240, 245, 0.85);
+      --surface-blur: 12px;
+      --particle-color: rgba(216, 27, 96, 0.5);
+      --text-primary: #880e4f;
+      --text-secondary: #ec407a;
+      --border-color: rgba(244, 143, 177, 0.7);
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 80%, 60%) 0%, #f06292 100%);
+    }
+    
+    :root {
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+    
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      animation: gradientMagic 20s ease infinite;
+      background: linear-gradient(125deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));
+      background-size: 200% 200%;
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      margin: 0;
+      min-height: 100vh;
+      padding: 0;
+      transition: background 0.8s ease, color 0.8s ease;
+    }
+    @keyframes gradientMagic {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    h1, h2, h3, p, li {
+      margin: 0;
+      transition: color 0.4s ease;
+    }
+
+    #blob-container {
+      overflow: hidden;
+      pointer-events: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .blob {
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.6;
+      position: absolute;
+      will-change: transform;
+      transform: translate(var(--x, 0px), var(--y, 0px));
+    }
+    .blob:nth-child(1) {
+      animation: move-blob-1 25s infinite alternate ease-in-out;
+      background: hsla(var(--primary-hue), var(--primary-sat), calc(var(--primary-light) + 10%), 0.5);
+      height: 80vmin;
+      left: -10%;
+      top: -10%;
+      width: 80vmin;
+    }
+    .blob:nth-child(2) {
+      animation: move-blob-2 30s infinite alternate ease-in-out;
+      background: hsla(calc(var(--primary-hue) + 120), var(--primary-sat), var(--primary-light), 0.5);
+      height: 60vmin;
+      left: 60%;
+      top: 50%;
+      width: 60vmin;
+    }
+    .blob:nth-child(3) {
+      animation: move-blob-3 22s infinite alternate ease-in-out;
+      background: hsla(calc(var(--primary-hue) - 120), var(--primary-sat), var(--primary-light), 0.4);
+      height: 50vmin;
+      left: 10%;
+      top: 60%;
+      width: 50vmin;
+    }
+    @keyframes move-blob-1 { to { transform: translate(var(--x), var(--y)) scale(1.2) translate(-20vw, 15vh) rotate(180deg); } }
+    @keyframes move-blob-2 { to { transform: translate(var(--x), var(--y)) scale(0.8) translate(15vw, 20vh) rotate(-180deg); } }
+    @keyframes move-blob-3 { to { transform: translate(var(--x), var(--y)) scale(1.1) translate(20vw, -25vh) rotate(90deg); } }
+
+    .main-content {
+      display: block;
+      margin-inline: auto;
+      max-width: 900px;
+      padding: 2rem 1rem;
+    }
+    
+    .card {
+      backdrop-filter: blur(var(--surface-blur));
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      contain: layout style;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;
+    }
+    
+    h1 {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    p, li {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    
+    ul {
+      padding-left: 20px;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--text-secondary);
+    }
+
+    .back-button {
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .back-button:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+    .back-button:active {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transform: translateY(0);
+    }
+
+    @media (min-width: 900px) {
+      .main-content {
+        padding: 4rem 1rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  
+  <div id="blob-container">
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+  </div>
+
+  <main class="main-content">
+    <div class="card">
+      <h1>m00d matrix Privacy Policy</h1>
+      <p>Last Updated: September 16, 2025</p>
+      <p>We believe your personal data should stay just that—**personal**. This privacy policy is simple and designed to be crystal clear. When you use m00d matrix, you can be confident that your information is private and secure.</p>
+
+      <h2>1. The Core Principle: Local Storage</h2>
+      <p>m00d matrix is a **local-first** application. This means all of your mood entries, notes, and history are stored directly on your device's web browser using a feature called **Local Storage**. We do not, and cannot, access or view your data.</p>
+      <ul>
+        <li><strong>We don't have a server to store your data.</strong> There's no database on our end with your mood entries.</li>
+        <li><strong>Your data is yours.</strong> You have full control. You can export it as a CSV file to keep a personal copy, and you can clear your browser's data to delete it from your device at any time.</li>
+      </ul>
+
+      <h2>2. What About the AI?</h2>
+      <p>The "Consult with AI" feature is designed to be as private as possible. When you use this feature:</p>
+      <ul>
+        <li><strong>Your data is sent anonymously.</strong> We temporarily convert your mood history into a CSV file **on your device** and then send that anonymous data to a secure AI service for analysis.</li>
+        <li><strong>It's a one-way street.</strong> The AI service receives the data, generates an insight, and returns it to your app. It does not store your data. Once the analysis is complete, your data is not retained by the AI service or by us.</li>
+        <li><strong>No personal identifiers are sent.</strong> The data sent to the AI includes dates, mood scores, and notes, but it is not linked to your identity in any way.</li>
+      </ul>
+
+      <h2>3. What Information Do We Collect?</h2>
+      <p>Absolutely none. Since there is no user account system and no server-side data storage, we have no means of collecting, logging, or tracking any personal information about you or your usage of the application.</p>
+
+      <h2>4. Cookies & Analytics</h2>
+      <p>m00d matrix does not use cookies for tracking purposes. We do not use any third-party analytics services (like Google Analytics) to monitor user behavior.</p>
+
+      <h2>5. Changes to This Policy</h2>
+      <p>If we ever make a significant change to how the app works (for example, if we add an optional cloud sync feature in the future), we will update this policy and notify users. Our commitment to your privacy will always remain our top priority.</p>
+
+      <h2>6. Contact Us</h2>
+      <p>If you have any questions about this privacy policy, please feel free to reach out. We're happy to talk about our privacy-first approach.</p>
+      <p>Thank you for trusting m00d matrix with your journey of self-discovery.</p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="index.html" class="back-button">Back to m00d matrix</a>
+    </div>
+  </main>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Retain the theme from local storage
+      const savedTheme = localStorage.getItem('moodTheme_v3') || 'magic';
+      document.documentElement.dataset.theme = savedTheme;
+    });
+  </script>
+</body>
+</html>
