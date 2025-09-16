@@ -803,6 +803,40 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
+
+    /* 14. About Page & Link */
+    .about-link {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .about-link:hover {
+        color: var(--primary-color);
+        text-decoration: underline;
+    }
+    .about-content h2, .about-content h3 {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .about-content h2 { font-size: 1.5rem; }
+    .about-content h3 { font-size: 1.2rem; }
+    .about-content p, .about-content li {
+        color: var(--text-primary);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+    .about-content img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 1rem auto;
+        border-radius: var(--radius-md);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
@@ -836,6 +870,7 @@
         <button class="theme-swatch" data-theme="neko" style="background: linear-gradient(135deg, #d81b60, #f06292);" aria-label="Neko Spark Theme" title="Neko Spark"></button>
       </div>
       <button class="button button--primary" data-action="show-history">View History & Insights</button>
+      <button class="button button--secondary" data-action="show-about">About</button>
     </div>
   </header>
   
@@ -861,9 +896,27 @@
       <h2 class="card__title">m00d note</h2>
       <textarea id="mood-note" class="form-input" rows="5" placeholder="What's on your mind? What are you grateful for?"></textarea>
     </div>
-    <div style="text-align: center; margin-top: 1.5rem;">
-      <a href="privacy.html" target="_blank" class="privacy-link">Privacy Policy</a>
+    <div style="text-align: center; margin-top: 2rem; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem;">
+        <a href="https://github.com/ranfysvalle02/m00d" target="_blank" style="font-size: 0.9rem; color: var(--text-secondary); text-decoration: none; transition: all 0.2s ease; font-weight: 500;">
+            Github
+        </a>
+        <span style="color: var(--text-secondary); opacity: 0.5;">|</span>
+        <a href="privacy.html" target="_blank" style="font-size: 0.9rem; color: var(--text-secondary); text-decoration: none; transition: all 0.2s ease; font-weight: 500;">
+            Privacy Policy
+        </a>
+        <span style="color: var(--text-secondary); opacity: 0.5;">|</span>
+        <button data-action="show-about" style="background: none; border: none; padding: 0; font: inherit; cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); text-decoration: none; transition: all 0.2s ease; font-weight: 500;">
+            About
+        </button>
     </div>
+
+    <style>
+        /* Add this hover effect to your main stylesheet */
+        a:hover, button:hover {
+            color: var(--primary-color) !important;
+            text-decoration: underline !important;
+        }
+    </style>
   </main>
   
   <dialog id="history-dialog" class="dialog">
@@ -916,6 +969,87 @@
     </div>
     <footer class="dialog__footer">
       <button class="button button--primary" data-action="close-dialog">Done</button>
+    </footer>
+  </dialog>
+
+  <dialog id="about-dialog" class="dialog">
+    <header class="dialog__header">
+      <h2 class="dialog__title">About m00d matrix</h2>
+      <button class="dialog__close" data-action="close-dialog" aria-label="Close dialog">&times;</button>
+    </header>
+    <div class="dialog__body about-content">
+      <h2>Mood Tracking: Your Secret Weapon for a Healthier Mind</h2>
+      <p>Mood tracking is a simple but powerful tool for boosting your mental health. By regularly recording your emotions, you can gain self-awareness, identify patterns, and make positive changes in your life. This practice is a core component of **Cognitive Behavioral Therapy (CBT)**, which teaches you to understand the links between your thoughts, feelings, and actions.</p>
+      
+      ---
+
+      <h2>What is Mood Tracking?</h2>
+      <p>Mood tracking is the practice of observing and recording your emotional state over time. Think of it as keeping a log of your feelings. By consistently noting your moods—like Upset, Calm, or Very Happy—you can begin to see **patterns**. You might notice that certain activities, people, or times of day consistently trigger a specific emotional response. This process gives you valuable insights into how your thoughts and actions shape your emotional well-being.</p>
+      
+      <h3>A Key Principle from CBT</h3>
+      <p>Cognitive Behavioral Therapy (CBT) is a form of psychotherapy that focuses on the interconnected cycle of thoughts, feelings, and behaviors. Mood tracking is a perfect match for this approach because it helps you:</p>
+      <ul>
+        <li>**Build Awareness:** It makes you more mindful of your daily emotional ups and downs.</li>
+        <li>**Spot Triggers:** It helps you identify the specific events or thought patterns that precede certain moods.</li>
+        <li>**Encourage Action:** Once you can name your mood and understand its cause, you can begin to challenge negative thoughts or adjust your routine to support a more positive emotional state.</li>
+      </ul>
+      <p>Seeing these patterns clearly on a chart or in a journal can help you pinpoint what's working for you and what isn't.</p>
+
+      ---
+      
+      <h2>Why Should You Track Your Mood?</h2>
+      <p>Regular mood tracking offers several key benefits that can lead to a healthier and more resilient mindset.</p>
+      <ul>
+        <li>**Early Detection:** Subtle emotional shifts can often be early warning signs of bigger mental health challenges like burnout or heightened anxiety. By tracking your mood, you can catch these changes early and take action before they escalate.</li>
+        <li>**Gains Clarity and Perspective:** When emotions feel overwhelming, writing them down can make them feel more manageable and less daunting. This practice transforms chaotic feelings into tangible data you can examine with a sense of detachment, which promotes self-compassion.</li>
+        <li>**Informs Goal-Setting:** Tracking helps you set smarter, more effective personal goals. For example, if you notice you feel anxious after scrolling through social media before bed, you can set a goal to put your phone away earlier. This small change, guided by your data, can have a big impact.</li>
+        <li>**Measures Progress:** Over time, your entries create a personal record of your journey. You can look back at your history and see how far you've come. It also helps you measure the effectiveness of new habits—like starting a new exercise routine or practicing mindfulness—to see if they are correlated with a better mood.</li>
+        <li>**Communicate More Clearly:** Your mood tracker can help you express your feelings to others more effectively, whether that's a loved one, a friend, or a mental health professional.</li>
+      </ul>
+
+      ---
+
+      <h2>AI Mood Insights Example</h2>
+      <img src="https://raw.githubusercontent.com/obliviocompany/m00d-matrix/main/m00d.png" alt="Mood Matrix App Screenshot" style="display:block; max-width:100%; height:auto; margin: 1rem auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      <p>"Based on your mood data, an analysis might find that your mood varies throughout the day. For example, in the mornings of September 15, you may have felt quite low but improved significantly by the afternoon. On September 16, your morning was also tough, but you felt better in the evening. This suggests that mornings may be challenging for you. Consider starting your day with a positive routine or small activities that bring you joy. Tracking your mood can help you identify patterns and triggers, allowing you to focus on activities that lift your spirits. Keep up the good work."</p>
+
+      ---
+
+      <h2>How to Get Started</h2>
+      <p>It's easy to begin mood tracking. The most important thing is to find a system that works for you and stick with it.</p>
+      <ol>
+        <li>**Choose a System:** You can use a simple paper journal, a digital spreadsheet, or a dedicated mood-tracking app like m00d matrix. Other effective methods include The Feelings Wheel, wearable devices, photo mood tracking, and voice memos. The right tool is the one you'll use consistently.</li>
+        <li>**Record Consistently:** Try to log your mood at least once a day. Many people find it helpful to check in with themselves in the morning and again in the evening.</li>
+        <li>**Add Context:** Don't just record the emotion; add a short note about what happened. This note is where the real insights are found. It could be about a conversation you had, a task you completed, or a physical symptom you're experiencing.</li>
+        <li>**Look for Patterns:** Make time to review your logs weekly or monthly. Notice if there are recurring emotional states tied to specific people, places, or activities. This is where the magic happens.</li>
+        <li>**Experiment:** Once you spot a negative pattern, try a small experiment to break it. For instance, if you notice your mood plummets after a stressful work meeting, try taking a short walk or listening to music immediately afterward.</li>
+      </ol>
+
+      ---
+
+      <h2>Tips for Success</h2>
+      <ul>
+        <li>**Be Honest:** Don't try to sugarcoat your feelings. For the process to be useful, you must be honest with yourself, even if your mood isn't "ideal."</li>
+        <li>**Practice Self-Compassion:** If you spot recurring negative thoughts, treat yourself with kindness, not judgment. You're on a journey of learning and adapting.</li>
+        <li>**Integrate with Therapy:** If you're working with a mental health professional, share your mood logs with them. They can help you interpret the data and create personalized coping strategies.</li>
+        <li>**Celebrate the Wins:** Pay attention to the positive moments, too! Noticing and celebrating the small bright spots can keep you motivated and remind you that you're making progress.</li>
+        <li>**Try to Improve a Low Mood:** When you notice a dip in your mood, try simple strategies like reducing stress, engaging in enjoyable activities, getting rest, moving your body, or reaching out to a loved one.</li>
+      </ul>
+
+      ---
+
+      <h2>The CBT Connection</h2>
+      <p>The synergy between mood tracking and Cognitive Behavioral Therapy is a powerful blueprint for personal growth. When you use mood tracking as a part of your daily routine, you naturally develop a **habit of self-reflection**. This practice helps you build a crucial **skill in assessing** which of your thoughts are constructive and which are harmful.</p>
+      <p>Ultimately, mood tracking helps you learn how to **challenge and reframe** negative beliefs into more balanced and realistic ones. It turns a seemingly simple act of logging an emotion into a powerful tool for emotional regulation.</p>
+
+      ---
+
+      <h2>In Closing</h2>
+      <p>Mood tracking is much more than a list of emotions. It's an investment in your mental health. It's a powerful tool for self-awareness and emotional regulation that can lead to meaningful behavioral changes.</p>
+      <p>Whether you use an app or a simple journal, each daily log adds up, giving you the clarity and insight to make impactful changes in your life. If you're new to this, just start with a week or two of consistent tracking. You'll likely be amazed at the patterns you uncover, and with a bit of curiosity and kindness, you can use those insights to shape a life that truly supports your emotional health.</p>
+    </div>
+    <footer class="dialog__footer">
+        <button class="button button--primary" data-action="close-dialog">Close</button>
     </footer>
   </dialog>
 
@@ -979,7 +1113,8 @@
           aiDialog: document.getElementById('ai-dialog'),
           aiResponseBody: document.getElementById('ai-response-body'),
           aiResponseText: document.getElementById('ai-response-text'),
-          aiLoadingState: document.getElementById('ai-loading-state')
+          aiLoadingState: document.getElementById('ai-loading-state'),
+          aboutDialog: document.getElementById('about-dialog')
         },
   
         // --- 4. CORE LOGIC (Initialization & Data Management) ---
@@ -1260,6 +1395,10 @@
               this.renderHistoryCharts();
               this.renderHistoryTable();
               this.dom.historyDialog.showModal();
+              document.body.classList.add('modal-open');
+              break;
+            case 'show-about':
+              this.dom.aboutDialog.showModal();
               document.body.classList.add('modal-open');
               break;
             case 'close-dialog':
