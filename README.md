@@ -1,14 +1,14 @@
 # m00d matrix
 
----
+*Image from: [https://www.calm.com/blog/mood-monitoring](https://www.calm.com/blog/mood-monitoring)*
 
-***
+-----
 
-#### Mood Tracking: Your Secret Weapon for a Healthier Mind
+### Mood Tracking: Your Secret Weapon for a Healthier Mind
 
 Mood tracking is a simple but powerful tool for boosting your mental health. By regularly recording your emotions, you can gain self-awareness, identify patterns, and make positive changes in your life. This practice is a core component of **Cognitive Behavioral Therapy (CBT)**, which teaches you to understand the links between your thoughts, feelings, and actions.
 
-***
+-----
 
 ## What is Mood Tracking?
 
@@ -24,18 +24,18 @@ Cognitive Behavioral Therapy (CBT) is a form of psychotherapy that focuses on th
 
 Seeing these patterns clearly on a chart or in a journal can help you pinpoint what’s working for you and what isn’t.
 
----
+-----
 
 ## Why Should You Track Your Mood?
 
 Regular mood tracking offers several key benefits that can lead to a healthier and more resilient mindset.
 
-* **Early Detection:** Subtle emotional shifts can often be early warning signs of bigger mental health challenges like burnout or heightened anxiety. By tracking your mood, you can catch these changes early and take action before they escalate.
-* **Gains Clarity and Perspective:** When emotions feel overwhelming, writing them down can make them feel more manageable and less daunting. This practice transforms chaotic feelings into tangible data you can examine with a sense of detachment, which promotes self-compassion.
-* **Informs Goal-Setting:** Tracking helps you set smarter, more effective personal goals. For example, if you notice you feel anxious after scrolling through social media before bed, you can set a goal to put your phone away earlier. This small change, guided by your data, can have a big impact.
-* **Measures Progress:** Over time, your entries create a personal record of your journey. You can look back at your history and see how far you've come. It also helps you measure the effectiveness of new habits—like starting a new exercise routine or practicing mindfulness—to see if they are correlated with a better mood.
+  * **Early Detection:** Subtle emotional shifts can often be early warning signs of bigger mental health challenges like burnout or heightened anxiety. By tracking your mood, you can catch these changes early and take action before they escalate.
+  * **Gains Clarity and Perspective:** When emotions feel overwhelming, writing them down can make them feel more manageable and less daunting. This practice transforms chaotic feelings into tangible data you can examine with a sense of detachment, which promotes self-compassion.
+  * **Informs Goal-Setting:** Tracking helps you set smarter, more effective personal goals. For example, if you notice you feel anxious after scrolling through social media before bed, you can set a goal to put your phone away earlier. This small change, guided by your data, can have a big impact.
+  * **Measures Progress:** Over time, your entries create a personal record of your journey. You can look back at your history and see how far you've come. It also helps you measure the effectiveness of new habits—like starting a new exercise routine or practicing mindfulness—to see if they are correlated with a better mood.
 
----
+-----
 
 ## How to Get Started
 
@@ -47,16 +47,16 @@ It's easy to begin mood tracking. The most important thing is to find a system t
 4.  **Look for Patterns:** Make time to review your logs weekly or monthly. Notice if there are recurring emotional states tied to specific people, places, or activities. This is where the magic happens.
 5.  **Experiment:** Once you spot a negative pattern, try a small experiment to break it. For instance, if you notice your mood plummets after a stressful work meeting, try taking a short walk or listening to music immediately afterward.
 
----
+-----
 
 ## Tips for Success
 
-* **Be Honest:** Don't try to sugarcoat your feelings. For the process to be useful, you must be honest with yourself, even if your mood isn't "ideal."
-* **Practice Self-Compassion:** If you spot recurring negative thoughts, treat yourself with kindness, not judgment. You’re on a journey of learning and adapting.
-* **Integrate with Therapy:** If you're working with a mental health professional, share your mood logs with them. They can help you interpret the data and create personalized coping strategies.
-* **Celebrate the Wins:** Pay attention to the positive moments, too! Noticing and celebrating the small bright spots can keep you motivated and remind you that you're making progress.
+  * **Be Honest:** Don't try to sugarcoat your feelings. For the process to be useful, you must be honest with yourself, even if your mood isn't "ideal."
+  * **Practice Self-Compassion:** If you spot recurring negative thoughts, treat yourself with kindness, not judgment. You’re on a journey of learning and adapting.
+  * **Integrate with Therapy:** If you're working with a mental health professional, share your mood logs with them. They can help you interpret the data and create personalized coping strategies.
+  * **Celebrate the Wins:** Pay attention to the positive moments, too\! Noticing and celebrating the small bright spots can keep you motivated and remind you that you're making progress.
 
----
+-----
 
 ## The CBT Connection
 
@@ -64,7 +64,7 @@ The synergy between mood tracking and Cognitive Behavioral Therapy is a powerful
 
 Ultimately, mood tracking helps you learn how to **challenge and reframe** negative beliefs into more balanced and realistic ones. It turns a seemingly simple act of logging an emotion into a powerful tool for emotional regulation.
 
----
+-----
 
 ## In Closing
 
