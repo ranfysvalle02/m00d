@@ -45,9 +45,7 @@ Regular mood tracking offers several key benefits that can lead to a healthier a
 ![](demo.png)
 
 
-```
-Based on your mood data, an analysis might find that your mood varies throughout the day. For example, in the mornings of September 15, you may have felt quite low but improved significantly by the afternoon. On September 16, your morning was also tough, but you felt better in the evening.
-```
+```Based on your mood data, an analysis might find that your mood varies throughout the day. For example, in the mornings of September 15, you may have felt quite low but improved significantly by the afternoon. On September 16, your morning was also tough, but you felt better in the evening.```
 
 This suggests that mornings may be challenging for you. Consider starting your day with a positive routine or small activities that bring you joy. Tracking your mood can help you identify patterns and triggers, allowing you to focus on activities that lift your spirits. Keep up the good work.
 
