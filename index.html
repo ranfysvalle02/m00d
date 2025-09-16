@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0288d1"/>
+    
     <style>
         /* --- 1. Design System, Themes & Base --- */
         :root, [data-theme="magic"] {
@@ -286,6 +289,19 @@
     </dialog>
 
     <script>
+        // PWA service worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => {
+                        console.log('Service Worker registered! 😎', reg);
+                    })
+                    .catch(err => {
+                        console.log('Service Worker registration failed: 😭', err);
+                    });
+            });
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
             const App = {
                 config: {
@@ -550,58 +566,6 @@
                     const target = e.target; 
                     if (target === this.dom.datePicker || target.matches('.period-toggle__input')) { this.state.selectedDate = this.dom.datePicker.value; this.state.period = document.querySelector('input[name="period"]:checked').value; this.updateUI(); } 
                     else if (target === this.dom.moodNote) { this.updateMoodEntry('note', target.value); } 
-                },
-                
-                handleAction(action, target) {
-                    const dialog = target.closest('dialog');
-                    switch (action) {
-                        case 'show-history':
-                            this.state.historyViewState = { currentPage: 1, itemsPerPage: 10, sortBy: 'date', sortOrder: 'desc', activeChartTab: 'trend' };
-                            this.renderHistoryCharts();
-                            this.renderHistoryTable();
-                            this.dom.historyDialog.showModal(); document.body.classList.add('modal-open'); break;
-                        case 'switch-chart-tab':
-                            const tab = target.dataset.tab;
-                            if (tab) {
-                                this.state.historyViewState.activeChartTab = tab;
-                                this.dom.chartTabsContainer.querySelectorAll('.chart-tabs__button').forEach(btn => btn.classList.remove('active'));
-                                this.dom.historyChartsContainer.querySelectorAll('.chart-panel').forEach(panel => panel.classList.remove('active'));
-                                target.classList.add('active');
-                                document.getElementById(`${tab}-panel`).classList.add('active');
-                            }
-                            break;
-                        case 'toggle-notes':
-                            const row = target.closest('.entry-row');
-                            if (row && row.dataset.hasNotes === 'true') {
-                                const notesRow = row.nextElementSibling;
-                                if (notesRow && notesRow.classList.contains('notes-row')) {
-                                    row.classList.toggle('notes-visible');
-                                    notesRow.style.display = notesRow.style.display === 'table-row' ? 'none' : 'table-row';
-                                }
-                            }
-                            break;
-                        case 'close-dialog': 
-                            dialog?.close(); 
-                            document.body.classList.remove('modal-open'); 
-                            break;
-                        case 'prev-page': 
-                            if (this.state.historyViewState.currentPage > 1) { this.state.historyViewState.currentPage--; this.renderHistoryTable(); } 
-                            break;
-                        case 'next-page': 
-                            this.state.historyViewState.currentPage++; this.renderHistoryTable(); 
-                            break;
-                        case 'export-csv': 
-                            this.exportData.showPreview(); 
-                            break;
-                        case 'confirm-export':
-                            this.exportData.downloadCSV();
-                            this.dom.csvPreviewDialog.close();
-                            document.body.classList.remove('modal-open');
-                            break;
-                        case 'import-csv': 
-                            this.dom.csvImportInput.click(); this.dom.csvImportInput.onchange = (e) => this.importData.fromCSV(e.target.files[0]); 
-                            break;
-                    }
                 },
                 
                 handleMouseMove(e) { 
