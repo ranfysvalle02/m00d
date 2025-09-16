@@ -30,6 +30,8 @@ Seeing these patterns clearly on a chart or in a journal can help you pinpoint w
 
 ## Why Should You Track Your Mood?
 
+![](m00d.png)
+
 Regular mood tracking offers several key benefits that can lead to a healthier and more resilient mindset.
 
   * **Early Detection:** Subtle emotional shifts can often be early warning signs of bigger mental health challenges like burnout or heightened anxiety. By tracking your mood, you can catch these changes early and take action before they escalate.
