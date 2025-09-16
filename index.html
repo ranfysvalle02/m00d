@@ -1,1657 +1,1494 @@
-<!DOCTYPE html>  
-<html lang="en" data-theme="magic">  
-<head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <title>m00d matrix | personal mood tracking</title>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
-  <link rel="preconnect" href="https://fonts.googleapis.com">  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">  
-  <link rel="manifest" href="/manifest.json">  
-  <meta name="theme-color" content="#0288d1"/>  
-  
-  <style>  
-    /* ------------------------------  
-       1. Design System & Themes  
-       ------------------------------ */  
-    :root, [data-theme="magic"] {  
-      --primary-hue: 207; --primary-sat: 96%; --primary-light: 41%;  
-      --bg-grad-1: #e0f7fa; --bg-grad-2: #e1f5fe; --bg-grad-3: #e8eaf6;  
-      --surface-color: rgba(255, 255, 255, 0.6);  
-      --input-bg: rgba(255, 255, 255, 0.8);  
-      --surface-blur: 10px;  
-      --particle-color: rgba(2, 136, 209, 0.5);  
-      --text-primary: #0d47a1;  
-      --text-secondary: #1565c0;  
-      --border-color: rgba(179, 229, 252, 0.7);  
-      --primary-color: hsl(var(--primary-hue), var(--primary-sat), var(--primary-light));  
-      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 80%, 55%) 0%, #039be5 100%);  
-      --secondary-gradient: linear-gradient(135deg, #8e24aa 0%, #d81b60 100%);  
-      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);  
-    }  
-  
-    [data-theme="cosmic"] {  
-      --primary-hue: 259; --primary-sat: 80%; --primary-light: 67%;  
-      --bg-grad-1: #00000c; --bg-grad-2: #0c001e; --bg-grad-3: #110729;  
-      --surface-color: rgba(20, 15, 35, 0.65);  
-      --input-bg: rgba(20, 15, 35, 0.85);  
-      --surface-blur: 12px;  
-      --particle-color: rgba(139, 92, 246, 0.5);  
-      --text-primary: #e3e4fa;  
-      --text-secondary: #a4a6f9;  
-      --border-color: rgba(87, 72, 138, 0.7);  
-      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);  
-    }  
-  
-    [data-theme="golden"] {  
-      --primary-hue: 39; --primary-sat: 100%; --primary-light: 50%;  
-      --bg-grad-1: #fff8e1; --bg-grad-2: #ffecb3; --bg-grad-3: #fff3e0;  
-      --surface-color: rgba(255, 250, 237, 0.6);  
-      --input-bg: rgba(255, 250, 237, 0.8);  
-      --surface-blur: 10px;  
-      --particle-color: rgba(255, 143, 0, 0.5);  
-      --text-primary: #4e342e;  
-      --text-secondary: #8d6e63;  
-      --border-color: rgba(255, 224, 178, 0.7);  
-      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 100%, 60%) 0%, #fb8c00 100%);  
-    }  
-  
-    [data-theme="biolume"] {  
-      --primary-hue: 188; --primary-sat: 78%; --primary-light: 47%;  
-      --bg-grad-1: #001c22; --bg-grad-2: #00313a; --bg-grad-3: #012a30;  
-      --surface-color: rgba(5, 45, 55, 0.65);  
-      --input-bg: rgba(5, 45, 55, 0.85);  
-      --surface-blur: 14px;  
-      --particle-color: rgba(34, 184, 207, 0.5);  
-      --text-primary: #c5f6fa;  
-      --text-secondary: #66d9e8;  
-      --border-color: rgba(38, 78, 69, 0.7);  
-      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 85%, 55%) 0%, #4dd0e1 100%);  
-      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);  
-    }  
-  
-    [data-theme="neko"] {  
-      --primary-hue: 337; --primary-sat: 78%; --primary-light: 50%;  
-      --bg-grad-1: #fce4ec; --bg-grad-2: #f8bbd0; --bg-grad-3: #fce4ec;  
-      --surface-color: rgba(255, 240, 245, 0.65);  
-      --input-bg: rgba(255, 240, 245, 0.85);  
-      --surface-blur: 12px;  
-      --particle-color: rgba(216, 27, 96, 0.5);  
-      --text-primary: #880e4f;  
-      --text-secondary: #ec407a;  
-      --border-color: rgba(244, 143, 177, 0.7);  
-      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 80%, 60%) 0%, #f06292 100%);  
-    }  
-  
-    :root {  
-      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;  
-      --radius-md: 12px;  
-      --radius-lg: 16px;  
-      --success-color: #22c55e;  
-      --danger-color: #ef4444;  
-    }  
-  
-    /* Reset & base styles */  
-    *, *::before, *::after {  
-      box-sizing: border-box;  
-    }  
-    body {  
-      font-family: var(--font-family);  
-      background: linear-gradient(125deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));  
-      background-size: 200% 200%;  
-      color: var(--text-primary);  
-      margin: 0;  
-      padding: 0;  
-      min-height: 100vh;  
-      animation: gradientMagic 20s ease infinite;  
-      transition: background 0.8s ease, color 0.8s ease;  
-    }  
-    @keyframes gradientMagic {  
-      0% { background-position: 0% 50%; }  
-      50% { background-position: 100% 50%; }  
-      100% { background-position: 0% 50%; }  
-    }  
-    body.modal-open {  
-      overflow: hidden;  
-    }  
-    h1, h2, h3, p, label, div, span, td, th {  
-      transition: color 0.4s ease;  
-      margin: 0;  
-    }  
-  
-    /* ------------------------------  
-       2. Blobs & Background Effects  
-       ------------------------------ */  
-    #blob-container {  
-      position: fixed;  
-      top: 50%;  
-      left: 50%;  
-      width: 100%;  
-      height: 100%;  
-      transform: translate(-50%, -50%);  
-      z-index: -1;  
-      overflow: hidden;  
-      pointer-events: none;  
-    }  
-    .blob {  
-      position: absolute;  
-      border-radius: 50%;  
-      opacity: 0.6;  
-      filter: blur(100px);  
-      will-change: transform;  
-      transform: translate(var(--x, 0px), var(--y, 0px));  
-    }  
-    .blob:nth-child(1) {  
-      width: 80vmin;  
-      height: 80vmin;  
-      top: -10%;  
-      left: -10%;  
-      background: hsla(var(--primary-hue), var(--primary-sat), calc(var(--primary-light) + 10%), 0.5);  
-      animation: move-blob-1 25s infinite alternate ease-in-out;  
-    }  
-    .blob:nth-child(2) {  
-      width: 60vmin;  
-      height: 60vmin;  
-      top: 50%;  
-      left: 60%;  
-      background: hsla(calc(var(--primary-hue) + 120), var(--primary-sat), var(--primary-light), 0.5);  
-      animation: move-blob-2 30s infinite alternate ease-in-out;  
-    }  
-    .blob:nth-child(3) {  
-      width: 50vmin;  
-      height: 50vmin;  
-      top: 60%;  
-      left: 10%;  
-      background: hsla(calc(var(--primary-hue) - 120), var(--primary-sat), var(--primary-light), 0.4);  
-      animation: move-blob-3 22s infinite alternate ease-in-out;  
-    }  
-    @keyframes move-blob-1 {  
-      to {  
-        transform: translate(var(--x), var(--y)) scale(1.2) translate(-20vw, 15vh) rotate(180deg);  
-      }  
-    }  
-    @keyframes move-blob-2 {  
-      to {  
-        transform: translate(var(--x), var(--y)) scale(0.8) translate(15vw, 20vh) rotate(-180deg);  
-      }  
-    }  
-    @keyframes move-blob-3 {  
-      to {  
-        transform: translate(var(--x), var(--y)) scale(1.1) translate(20vw, -25vh) rotate(90deg);  
-      }  
-    }  
-  
-    /* ------------------------------  
-       3. Header (Fixed)  
-       ------------------------------ */  
-    .main-header {  
-      position: fixed;  
-      top: 0;  
-      left: 0;  
-      width: 100%;  
-      z-index: 999;  
-  
-      /* Mobile-friendly: stack content center */  
-      display: flex;  
-      flex-direction: column;  
-      align-items: center;  
-      gap: 1rem;  
-  
-      padding: 1rem;  
-      border: 1px solid var(--border-color);  
-      backdrop-filter: blur(var(--surface-blur));  
-      border-radius: 0 0 var(--radius-lg) var(--radius-lg);  
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
-    }  
-    @media (min-width: 900px) {  
-      /* Desktop: put logo on the left, controls on the right */  
-      .main-header {  
-        flex-direction: row;  
-        justify-content: space-between;  
-      }  
-    }  
-  
-    .header-content {  
-      display: flex;  
-      align-items: center;  
-      gap: 1rem;  
-      justify-content: center;  
-    }  
-    @media (min-width: 900px) {  
-      .header-content {  
-        justify-content: flex-start;  
-      }  
-    }  
-    .header-card__logo {  
-      width: 54px;  
-      height: 54px;  
-      margin-bottom: 0;  
-      transition: filter 0.3s ease;  
-      animation: float-breath 6s ease-in-out infinite;  
-    }  
-    @media (min-width: 900px) {  
-      .header-card__logo {  
-        width: 80px;  
-        height: 80px;  
-      }  
-    }  
-    .header-card__title {  
-      font-size: 1.4rem;  
-      background: var(--primary-gradient);  
-      -webkit-background-clip: text;  
-      -webkit-text-fill-color: transparent;  
-    }  
-    @media (min-width: 900px) {  
-      .header-card__title {  
-        font-size: 1.8rem;  
-      }  
-    }  
-    .main-header:hover .header-card__logo {  
-      filter: drop-shadow(0 8px 30px hsla(var(--primary-hue), 50%, 50%, 0.4));  
-    }  
-  
-    /* Mobile Toggle Button */  
-    .header-toggle {  
-      background: var(--primary-gradient);  
-      color: #fff;  
-      border: none;  
-      font-weight: 600;  
-      border-radius: 8px;  
-      padding: 0.5rem 1rem;  
-      cursor: pointer;  
-      transition: background-color 0.3s ease, transform 0.2s ease;  
-    }  
-    .header-toggle:hover {  
-      transform: translateY(-2px);  
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);  
-    }  
-    .header-toggle:active:hover {  
-      transform: translateY(0);  
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
-    }  
-    @media (min-width: 900px) {  
-      /* Hidden on desktop */  
-      .header-toggle {  
-        display: none;  
-      }  
-    }  
-  
-    /* The expanded menu (theme + history) */  
-    .header-controls {  
-      /* Hidden by default on mobile */  
-      overflow: hidden;  
-      max-height: 0;  
-      opacity: 0;  
-      pointer-events: none;  
-      transition: max-height 0.35s ease, opacity 0.35s ease;  
-  
-      display: flex;  
-      flex-direction: column;  
-      gap: 1rem;  
-      align-items: center;  
-      padding: 0 1rem; /* A bit of side padding for mobile swatches */  
-    }  
-    .header-controls.show {  
-      max-height: 700px; /* Increase for more breathing space */  
-      opacity: 1;  
-      pointer-events: auto;  
-      padding: 1rem;  
-    }  
-    @media (min-width: 900px) {  
-      /* Always visible on desktop; ensure full visibility */  
-      .header-controls {  
-        overflow: visible !important;  
-        max-height: none !important;  
-        opacity: 1 !important;  
-        pointer-events: auto !important;  
-        flex-direction: row;  
-        align-items: center;  
-        gap: 1rem;  
-        padding: 0;  
-      }  
-      .header-controls.show {  
-        padding: 0; /* In desktop, no extra needed */  
-      }  
-    }  
-  
-    /* Margin top to prevent content from hiding behind the fixed header */  
-    .main-content {  
-      margin-top: 11rem; /* Enough space for mobile header */  
-      display: block;  
-      max-width: 1200px;  
-      margin-inline: auto;  
-      padding: 1rem;  
-    }  
-    @media (min-width: 900px) {  
-      .main-content {  
-        margin-top: 8rem; /* Enough space for desktop header */  
-      }  
-    }  
-  
-    /* ------------------------------  
-       4. Cards  
-       ------------------------------ */  
-    .card {  
-      background-color: var(--surface-color);  
-      backdrop-filter: blur(var(--surface-blur));  
-      border-radius: var(--radius-lg);  
-      border: 1px solid var(--border-color);  
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);  
-      padding: 1.5rem;  
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;  
-      contain: layout style;  
-      margin-bottom: 1.5rem;  
-    }  
-    .card:hover {  
-      transform: translateY(-4px);  
-      box-shadow: 0 10px 30px var(--shadow-color);  
-    }  
-    .card__title {  
-      font-size: 1.5rem;  
-      font-weight: 600;  
-      margin-bottom: 1rem;  
-      background: var(--primary-gradient);  
-      -webkit-background-clip: text;  
-      -webkit-text-fill-color: transparent;  
-    }  
-  
-    /* ------------------------------  
-       5. Buttons  
-       ------------------------------ */  
-    .button {  
-      display: inline-flex;  
-      align-items: center;  
-      justify-content: center;  
-      border: none;  
-      border-radius: 8px;  
-      padding: 0.75rem 1.5rem;  
-      font: 500 0.9rem/1 var(--font-family);  
-      cursor: pointer;  
-      transition: all 0.2s ease;  
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
-    }  
-    @media (min-width: 900px) {  
-      .button {  
-        width: auto;  
-      }  
-    }  
-    .button:hover:not(:disabled) {  
-      transform: translateY(-2px);  
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);  
-    }  
-    .button:active:not(:disabled) {  
-      transform: translateY(0);  
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);  
-    }  
-    .button:disabled {  
-      cursor: not-allowed;  
-      opacity: 0.6;  
-    }  
-    .button--primary {  
-      background: var(--primary-gradient);  
-      color: white;  
-    }  
-    .button--secondary {  
-      background: var(--secondary-gradient);  
-      color: white;  
-    }  
-    .button--success {  
-      background-color: var(--success-color);  
-      color: white;  
-    }  
-    .button--danger {  
-      background-color: var(--danger-color);  
-      color: white;  
-    }  
-  
-    /* ------------------------------  
-       6. Form Inputs  
-       ------------------------------ */  
-    .form-input {  
-      width: 100%;  
-      padding: 0.75rem;  
-      border: 1px solid var(--border-color);  
-      border-radius: 8px;  
-      font-family: var(--font-family);  
-      font-size: 1rem;  
-      background-color: var(--input-bg);  
-      color: var(--text-primary);  
-      transition: all 0.2s ease;  
-    }  
-    .form-input::placeholder {  
-      color: var(--text-secondary);  
-      opacity: 0.8;  
-    }  
-    .form-input:focus-visible {  
-      outline: 2px solid var(--primary-color);  
-      outline-offset: 2px;  
-      border-color: transparent;  
-      box-shadow: 0 0 0 4px var(--shadow-color);  
-    }  
-  
-    /* ------------------------------  
-       7. Header Card (Logo) Animations  
-       ------------------------------ */  
-    @keyframes float-breath {  
-      0%, 100% {  
-        transform: translateY(0px) scale(1);  
-        filter: drop-shadow(0 5px 15px var(--shadow-color));  
-      }  
-      50% {  
-        transform: translateY(-8px) scale(1.05);  
-        filter: drop-shadow(0 8px 25px var(--shadow-color));  
-      }  
-    }  
-  
-    /* ------------------------------  
-       8. Date Navigator & Calendar  
-       ------------------------------ */  
-    .date-navigator {  
-      display: flex;  
-      flex-wrap: wrap;  
-      justify-content: center;  
-      align-items: center;  
-      gap: 1rem;  
-      margin-bottom: 1.5rem;  
-    }  
-    .period-toggle {  
-      display: flex;  
-      border: 1px solid var(--border-color);  
-      border-radius: 8px;  
-      overflow: hidden;  
-      transition: border-color 0.4s ease;  
-    }  
-    .period-toggle__label {  
-      padding: 8px 16px;  
-      cursor: pointer;  
-      color: var(--text-secondary);  
-      transition: all 0.3s ease;  
-    }  
-    .period-toggle__input {  
-      display: none;  
-    }  
-    .period-toggle__input:checked + .period-toggle__label {  
-      background: var(--primary-gradient);  
-      color: white;  
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);  
-    }  
-  
-    .week-calendar__table {  
-      width: 100%;  
-      border-collapse: separate;  
-      border-spacing: 5px;  
-    }  
-    .week-calendar__day {  
-      padding: 0.5rem;  
-      text-align: center;  
-      border-radius: var(--radius-md);  
-      cursor: pointer;  
-      transition: background-color 0.2s;  
-    }  
-    .week-calendar__day:hover {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);  
-    }  
-    .week-calendar__day--selected {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.2);  
-      font-weight: 600;  
-    }  
-    .week-calendar__date {  
-      font-size: 1.1rem;  
-      font-weight: 500;  
-    }  
-    .week-calendar__dots {  
-      font-size: 0.8rem;  
-      min-height: 1em;  
-      margin-top: 4px;  
-      color: var(--text-secondary);  
-    }  
-  
-    /* ------------------------------  
-       9. Mood Selector  
-       ------------------------------ */  
-    .mood-selector {  
-      text-align: center;  
-    }  
-    .mood-selector__prompt {  
-      font-size: 1.1rem;  
-      font-weight: 600;  
-      color: var(--primary-color);  
-      min-height: 1.1em;  
-      margin: 0.5rem 0 1rem;  
-    }  
-    @media (min-width: 900px) {  
-      .mood-selector__prompt {  
-        font-size: 1.25rem;  
-        min-height: 1.25em;  
-        margin: 0.5rem 0 1.5rem;  
-      }  
-    }  
-    .mood-selector__emojis {  
-      display: flex;  
-      justify-content: space-around;  
-    }  
-    .mood-selector__button {  
-      font-size: 2.2rem;  
-      background: none;  
-      border: none;  
-      padding: 0.5rem;  
-      cursor: pointer;  
-      border-radius: 50%;  
-      transition: transform 0.2s, background-color 0.2s;  
-    }  
-    @media (min-width: 900px) {  
-      .mood-selector__button {  
-        font-size: 2.8rem;  
-      }  
-    }  
-    .mood-selector__button:hover {  
-      transform: scale(1.15);  
-    }  
-    .mood-selector__button--selected {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.2);  
-      transform: scale(1.1);  
-    }  
-  
-    /* ------------------------------  
-       10. Theme Switcher  
-       ------------------------------ */  
-    .theme-switcher {  
-      display: flex;  
-      gap: 0.75rem;  
-      justify-content: center;  
-      flex-wrap: wrap;  
-    }  
-    .theme-swatch {  
-      width: 32px;  
-      height: 32px;  
-      border-radius: 50%;  
-      border: 2px solid var(--border-color);  
-      cursor: pointer;  
-      transition: all 0.2s ease;  
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);  
-      position: relative; /* So we can place a checkmark for the active theme */  
-    }  
-    .theme-swatch:hover {  
-      transform: scale(1.15);  
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);  
-    }  
-    .theme-swatch.active {  
-      border-color: var(--primary-color);  
-      transform: scale(1.1);  
-      box-shadow: 0 0 0 3px var(--primary-color);  
-    }  
-    /* Add a checkmark to the active theme */  
-    .theme-swatch.active::after {  
-      content: "✓";  
-      position: absolute;  
-      top: -8px;  
-      right: -8px;  
-      width: 24px;  
-      height: 24px;  
-      background-color: var(--primary-color);  
-      border-radius: 50%;  
-      display: flex;  
-      align-items: center;  
-      justify-content: center;  
-      color: #fff;  
-      font-weight: 600;  
-      box-shadow: 0 0 0 2px var(--surface-color);  
-      transition: transform 0.2s ease;  
-    }  
-  
-    /* ------------------------------  
-       11. Dialog (Modal) Styles  
-       ------------------------------ */  
-    .dialog {  
-      border: none;  
-      border-radius: var(--radius-lg);  
-      box-shadow: 0 10px 30px var(--shadow-color);  
-      padding: 0;  
-      width: 95%;  
-      max-width: 800px;  
-      max-height: 90vh;  
-      background-color: var(--surface-color);  
-      backdrop-filter: blur(var(--surface-blur));  
-      border: 1px solid var(--border-color);  
-    }  
-    .dialog::backdrop {  
-      background: rgba(0, 0, 0, 0.5);  
-      backdrop-filter: blur(4px);  
-    }  
-    .dialog[open] {  
-      display: grid;  
-      grid-template-rows: auto auto 1fr auto;  
-      animation: fadeIn 0.3s ease-out;  
-    }  
-    .dialog__header, .dialog__body, .dialog__footer {  
-      padding: 1rem 1.5rem;  
-    }  
-    @media (min-width: 900px) {  
-      .dialog__header, .dialog__body, .dialog__footer {  
-        padding: 1.5rem 2rem;  
-      }  
-    }  
-    .dialog__header {  
-      display: flex;  
-      justify-content: space-between;  
-      align-items: center;  
-      border-bottom: 1px solid var(--border-color);  
-    }  
-    .dialog__title {  
-      font-size: 1.25rem;  
-    }  
-    @media (min-width: 900px) {  
-      .dialog__title {  
-        font-size: 1.5rem;  
-      }  
-    }  
-    .dialog__close {  
-      font-size: 2rem;  
-      background: none;  
-      border: none;  
-      cursor: pointer;  
-      color: var(--text-secondary);  
-      line-height: 1;  
-      transition: color 0.2s, transform 0.2s;  
-    }  
-    .dialog__close:hover {  
-      color: var(--primary-color);  
-      transform: rotate(90deg);  
-    }  
-    .dialog__body {  
-      overflow-y: auto;  
-      color: var(--text-primary);  
-      padding-top: 0;  
-      padding-bottom: 0;  
-    }  
-    .dialog__footer {  
-      display: flex;  
-      flex-wrap: wrap;  
-      justify-content: flex-end;  
-      gap: 1rem;  
-      border-top: 1px solid var(--border-color);  
-      background-color: hsla(0, 0%, 100%, 0.05);  
-    }  
-    @keyframes fadeIn {  
-      from {  
-        opacity: 0;  
-        transform: translateY(-20px) scale(0.98);  
-      }  
-      to {  
-        opacity: 1;  
-        transform: translateY(0) scale(1);  
-      }  
-    }  
-  
-    /* ------------------------------  
-       12. History & Chart Styles  
-       ------------------------------ */  
-    .chart-tabs {  
-      display: flex;  
-      gap: 0.25rem;  
-      padding: 1rem 1.5rem 0;  
-      border-bottom: 1px solid var(--border-color);  
-      flex-wrap: wrap;  
-    }  
-    @media (min-width: 900px) {  
-      .chart-tabs {  
-        padding: 1rem 2rem 0;  
-      }  
-    }  
-    .chart-tabs__button {  
-      padding: 0.75rem 0.5rem;  
-      border: none;  
-      background-color: transparent;  
-      border-radius: 8px 8px 0 0;  
-      cursor: pointer;  
-      font-family: var(--font-family);  
-      font-size: 0.8rem;  
-      color: var(--text-secondary);  
-      transition: all 0.2s ease;  
-      border-bottom: 3px solid transparent;  
-      flex-grow: 1;  
-      text-align: center;  
-      white-space: nowrap;  
-    }  
-    @media (min-width: 900px) {  
-      .chart-tabs__button {  
-        font-size: 0.9rem;  
-        padding: 0.75rem 1rem;  
-        flex-grow: 0;  
-      }  
-    }  
-    .chart-tabs__button:hover {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);  
-    }  
-    .chart-tabs__button.active {  
-      font-weight: 600;  
-      color: var(--primary-color);  
-      border-bottom-color: var(--primary-color);  
-    }  
-    .chart-panel {  
-      padding: 1.5rem;  
-      display: none;  
-    }  
-    @media (min-width: 900px) {  
-      .chart-panel {  
-        padding: 2rem;  
-      }  
-    }  
-    .chart-panel.active {  
-      display: block;  
-      animation: fadeIn 0.4s;  
-    }  
-    .chart-container {  
-      position: relative;  
-      max-width: 500px;  
-      margin-inline: auto;  
-    }  
-    .chart-title {  
-      text-align: center;  
-      font-weight: 500;  
-      font-size: 0.9rem;  
-      margin-bottom: 0.5rem;  
-      color: var(--text-secondary);  
-    }  
-    .chart-explanation {  
-      font-size: 0.75rem;  
-      color: var(--text-secondary);  
-      text-align: center;  
-      margin-top: 0.75rem;  
-      max-width: 350px;  
-      margin-inline: auto;  
-      line-height: 1.4;  
-    }  
-  
-    .history-table {  
-      width: 100%;  
-      border-collapse: collapse;  
-    }  
-    .history-table th, .history-table td {  
-      padding: 12px 16px;  
-      text-align: left;  
-      border-bottom: 1px solid var(--border-color);  
-      vertical-align: middle;  
-      font-size: 0.9rem;  
-    }  
-    @media (min-width: 900px) {  
-      .history-table th, .history-table td {  
-        font-size: 1rem;  
-      }  
-    }  
-    .history-table th {  
-      font-weight: 600;  
-      user-select: none;  
-    }  
-    .history-table th[data-sort]:hover {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);  
-      cursor: pointer;  
-    }  
-    .history-table th.sort-active {  
-      color: var(--primary-color);  
-    }  
-    .history-table th .sort-indicator {  
-      display: inline-block;  
-      margin-left: 8px;  
-      opacity: 0.6;  
-    }  
-    .history-table tr.entry-row[data-has-notes="true"] {  
-      cursor: pointer;  
-    }  
-    .history-table tr.entry-row[data-has-notes="true"]:hover {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.05);  
-    }  
-    .history-table tr.entry-row.notes-visible {  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);  
-    }  
-    .history-table tr.notes-row {  
-      display: none;  
-    }  
-    .history-table .notes-content {  
-      padding: 1rem;  
-      white-space: pre-wrap;  
-      word-break: break-word;  
-      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.05);  
-    }  
-    .history-table .notes-content p {  
-      margin: 0 0 0.5rem;  
-      font-size: 0.9rem;  
-    }  
-    .history-table .notes-content p:last-child {  
-      margin-bottom: 0;  
-    }  
-    .history-table .mood-emoji {  
-      font-size: 1.5rem;  
-    }  
-  
-    .pagination-controls {  
-      padding: 1rem 1.5rem;  
-      display: flex;  
-      flex-direction: column;  
-      justify-content: space-between;  
-      align-items: center;  
-      border-top: 1px solid var(--border-color);  
-      gap: 0.75rem;  
-    }  
-    @media (min-width: 900px) {  
-      .pagination-controls {  
-        flex-direction: row;  
-        padding: 1rem 2rem;  
-      }  
-    }  
-    .pagination-status {  
-      font-size: 0.9rem;  
-      color: var(--text-secondary);  
-    }  
-    .pagination-buttons {  
-      display: flex;  
-      gap: 0.5rem;  
-    }  
-    .pagination-buttons .button {  
-      width: auto;  
-    }  
-  
-    .csv-preview {  
-      background-color: hsla(var(--primary-hue), 5%, 50%, 0.1);  
-      border-radius: var(--radius-md);  
-      padding: 1rem;  
-      font-family: monospace;  
-      font-size: 0.8rem;  
-      white-space: pre;  
-      overflow-x: auto;  
-      max-height: 200px;  
-      border: 1px solid var(--border-color);  
-    }  
-  </style>  
-</head>  
-<body>  
-  
-  <!-- Floating Blobs for Background Aesthetics -->  
-  <div id="blob-container">  
-    <div class="blob"></div>  
-    <div class="blob"></div>  
-    <div class="blob"></div>  
-  </div>  
-  
-  <!-- Fixed Header -->  
-  <header class="main-header card">  
-    <div class="header-content">  
-      <!-- Logo & Title -->  
-      <svg class="header-card__logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">  
-        <defs>  
-          <radialGradient id="orbGradient" cx="40%" cy="40%" r="60%">  
-            <stop offset="0%" style="stop-color: hsla(var(--primary-hue), var(--primary-sat), 80%, 1);" />  
-            <stop offset="100%" style="stop-color: var(--primary-color);" />  
-          </radialGradient>  
-        </defs>  
-        <circle cx="50" cy="50" r="40" fill="url(#orbGradient)" />  
-      </svg>  
-  
-      <h1 class="header-card__title">m00d matrix</h1>  
-      <!-- Mobile Toggle Button (Hidden on desktop) -->  
-      <button class="header-toggle" data-action="toggle-header-controls" aria-label="Expand Menu">  
-        Menu ☰  
-      </button>  
-    </div>  
-  
-    <!-- Theme Switcher & History Button (Expandable on mobile, always visible on desktop) -->  
-    <div class="header-controls">  
-      <div class="theme-switcher" id="theme-switcher">  
-        <button class="theme-swatch" data-theme="magic"  
-                style="background: linear-gradient(135deg, #0288d1, #039be5);"  
-                aria-label="Serene Sky Theme" title="Serene Sky"></button>  
-        <button class="theme-swatch" data-theme="cosmic"  
-                style="background: linear-gradient(135deg, #8b5cf6, #a855f7);"  
-                aria-label="Cosmic Rift Theme" title="Cosmic Rift"></button>  
-        <button class="theme-swatch" data-theme="golden"  
-                style="background: linear-gradient(135deg, #ff8f00, #fb8c00);"  
-                aria-label="Golden Hour Theme" title="Golden Hour"></button>  
-        <button class="theme-swatch" data-theme="biolume"  
-                style="background: linear-gradient(135deg, #22b8cf, #4dd0e1);"  
-                aria-label="Biolume Theme" title="Biolume"></button>  
-        <button class="theme-swatch" data-theme="neko"  
-                style="background: linear-gradient(135deg, #d81b60, #f06292);"  
-                aria-label="Neko Spark Theme" title="Neko Spark"></button>  
-      </div>  
-      <button class="button button--primary" data-action="show-history">View History & Insights</button>  
-    </div>  
-  </header>  
-  
-  <!-- Main Content -->  
-  <main class="main-content" id="app-container">  
-    <div class="card">  
-      <div class="date-navigator">  
-        <div class="period-toggle" id="period-toggle" role="radiogroup" aria-label="Time of day">  
-          <input class="period-toggle__input" type="radio" name="period" value="AM" id="period-am" checked>  
-          <label class="period-toggle__label" for="period-am">☀️ Morning</label>  
-          <input class="period-toggle__input" type="radio" name="period" value="PM" id="period-pm">  
-          <label class="period-toggle__label" for="period-pm">🌙 Evening</label>  
-        </div>  
-        <input type="date" id="date-picker" class="form-input" style="width: auto;" aria-label="Select date">  
-      </div>  
-      <div id="week-calendar"></div>  
-      <div class="mood-selector">  
-        <h2 class="card__title" style="margin-bottom: 0;">How are you feeling?</h2>  
-        <p class="mood-selector__prompt" id="mood-description" aria-live="polite"></p>  
-        <div class="mood-selector__emojis" id="emojis-container" role="group" aria-label="Select your mood"></div>  
-      </div>  
-    </div>  
-  
-    <div class="card">  
-      <h2 class="card__title">m00d note</h2>  
-      <textarea id="mood-note" class="form-input" rows="5" placeholder="What's on your mind? What are you grateful for?"></textarea>  
-    </div>  
-  </main>  
-  
-  <!-- History Dialog -->  
-  <dialog id="history-dialog" class="dialog">  
-    <header class="dialog__header">  
-      <h2 class="dialog__title">Mood History & Patterns</h2>  
-      <button class="dialog__close" data-action="close-dialog" aria-label="Close dialog">&times;</button>  
-    </header>  
-  
-    <div class="chart-tabs" id="chart-tabs-container"></div>  
-    <div id="history-charts-container"></div>  
-  
-    <div class="dialog__body" id="history-body"></div>  
-    <div id="pagination-controls" class="pagination-controls"></div>  
-  
-    <footer class="dialog__footer">  
-      <button class="button button--secondary" data-action="import-csv">Import CSV</button>  
-      <input type="file" id="csv-import-input" accept=".csv" style="display: none;">  
-      <button class="button button--success" data-action="export-csv">Export CSV</button>  
-      <button class="button button--danger" data-action="close-dialog">Close</button>  
-    </footer>  
-  </dialog>  
-  
-  <!-- CSV Preview Dialog -->  
-  <dialog id="csv-preview-dialog" class="dialog">  
-    <header class="dialog__header">  
-      <h2 class="dialog__title">Export Preview</h2>  
-      <button class="dialog__close" data-action="close-dialog" aria-label="Close dialog">&times;</button>  
-    </header>  
-    <div class="dialog__body" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">  
-      <p style="margin-bottom: 1rem; color: var(--text-secondary);">A preview of the first 10 rows of your data is shown below.</p>  
-      <pre id="csv-preview-content" class="csv-preview"></pre>  
-    </div>  
-    <footer class="dialog__footer">  
-      <button class="button button--secondary" data-action="close-dialog">Cancel</button>  
-      <button class="button button--success" data-action="confirm-export">Confirm & Download</button>  
-    </footer>  
-  </dialog>  
-  
-  <script>  
-    // PWA service worker registration  
-    if ('serviceWorker' in navigator) {  
-      window.addEventListener('load', () => {  
-        navigator.serviceWorker.register('/sw.js')  
-          .then(reg => {  
-            console.log('Service Worker registered! 😎', reg);  
-          })  
-          .catch(err => {  
-            console.log('Service Worker registration failed: 😭', err);  
-          });  
-      });  
-    }  
-  
-    document.addEventListener('DOMContentLoaded', () => {  
-      const App = {  
-        config: {  
-          moods: [  
-            { emoji: '😖', desc: 'Upset', score: 1, color: 'rgba(239, 68, 68, 0.8)' },  
-            { emoji: '😔', desc: 'Not Happy', score: 2, color: 'rgba(249, 115, 22, 0.8)' },  
-            { emoji: '😌', desc: 'Calm / Okay', score: 3, color: 'rgba(34, 197, 94, 0.8)' },  
-            { emoji: '😎', desc: 'Very Happy', score: 4, color: 'rgba(59, 130, 246, 0.8)' }  
-          ]  
-        },  
-        state: {  
-          moodHistory: {},  
-          selectedDate: new Date().toISOString().split('T')[0],  
-          period: new Date().getHours() < 12 ? 'AM' : 'PM',  
-          theme: 'magic',  
-          historyViewState: {  
-            currentPage: 1, itemsPerPage: 10,  
-            sortBy: 'date', sortOrder: 'desc',  
-            activeChartTab: 'trend'  
-          },  
-          charts: {},  
-          csvData: ''  
-        },  
-        dom: {  
-          datePicker: document.getElementById('date-picker'),  
-          weekCalendar: document.getElementById('week-calendar'),  
-          moodDescription: document.getElementById('mood-description'),  
-          emojisContainer: document.getElementById('emojis-container'),  
-          moodNote: document.getElementById('mood-note'),  
-          historyDialog: document.getElementById('history-dialog'),  
-          historyBody: document.getElementById('history-body'),  
-          csvImportInput: document.getElementById('csv-import-input'),  
-          csvPreviewDialog: document.getElementById('csv-preview-dialog'),  
-          csvPreviewContent: document.getElementById('csv-preview-content'),  
-          themeSwitcher: document.getElementById('theme-switcher'),  
-          blobs: document.querySelectorAll('.blob'),  
-          paginationControls: document.getElementById('pagination-controls'),  
-          historyChartsContainer: document.getElementById('history-charts-container'),  
-          chartTabsContainer: document.getElementById('chart-tabs-container'),  
-        },  
-  
-        init() {  
-          this.loadState();  
-          this.addEventListeners();  
-          this.updateUI();  
-          this.updateThemeUI();  
-          this.renderMoodSelector();  
-        },  
-  
-        loadState() {  
-          this.state.moodHistory = JSON.parse(localStorage.getItem('moodHistory_v3')) || {};  
-          this.state.theme = localStorage.getItem('moodTheme_v3') || 'magic';  
-        },  
-        saveState() {  
-          localStorage.setItem('moodHistory_v3', JSON.stringify(this.state.moodHistory));  
-          localStorage.setItem('moodTheme_v3', this.state.theme);  
-        },  
-  
-        updateUI() {  
-          this.dom.datePicker.value = this.state.selectedDate;  
-          document.querySelector(`input[name="period"][value="${this.state.period}"]`).checked = true;  
-          this.renderWeekCalendar();  
-          this.renderCurrentMoodEntry();  
-        },  
-  
-        renderWeekCalendar() {  
-          const selected = new Date(this.state.selectedDate + 'T00:00:00');  
-          const dayOfWeek = selected.getDay();  
-          let html = '<table class="week-calendar__table"><thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody><tr>';  
-  
-          for (let i = 0; i < 7; i++) {  
-            const d = new Date(selected);  
-            d.setDate(selected.getDate() - dayOfWeek + i);  
-            const dayString = d.toISOString().split('T')[0];  
-            const dayData = this.state.moodHistory[dayString] || {};  
-            const amMood = dayData.AM?.mood || '·';  
-            const pmMood = dayData.PM?.mood || '·';  
-            const isSelectedClass = dayString === this.state.selectedDate ? 'week-calendar__day--selected' : '';  
-  
-            html += `  
-              <td class="week-calendar__day ${isSelectedClass}" data-date="${dayString}">  
-                <div class="week-calendar__date">${d.getDate()}</div>  
-                <div class="week-calendar__dots"><span>${amMood}</span><span>${pmMood}</span></div>  
-              </td>`;  
-          }  
-          html += '</tr></tbody></table>';  
-          this.dom.weekCalendar.innerHTML = html;  
-        },  
-  
-        renderMoodSelector() {  
-          this.dom.emojisContainer.innerHTML = this.config.moods  
-            .map(({ emoji, desc }) => `<button class="mood-selector__button" data-mood="${emoji}" aria-label="${desc}">${emoji}</button>`)  
-            .join('');  
-        },  
-  
-        renderCurrentMoodEntry() {  
-          const { selectedDate, period } = this.state;  
-          const entry = this.state.moodHistory[selectedDate]?.[period];  
-          const currentMood = this.config.moods.find(m => m.emoji === entry?.mood);  
-  
-          this.dom.moodDescription.textContent = currentMood?.desc || 'Select a mood below';  
-          this.dom.moodNote.value = entry?.note || '';  
-          this.dom.emojisContainer.querySelectorAll('.mood-selector__button').forEach(btn => {  
-            btn.classList.toggle('mood-selector__button--selected', btn.dataset.mood === currentMood?.emoji);  
-          });  
-        },  
-  
-        updateThemeUI() {  
-          // Sync the <html> data-theme  
-          document.documentElement.dataset.theme = this.state.theme;  
-          // Mark active swatch  
-          this.dom.themeSwitcher.querySelectorAll('.theme-swatch').forEach(btn => {  
-            btn.classList.toggle('active', btn.dataset.theme === this.state.theme);  
-          });  
-        },  
-  
-        renderHistoryCharts() {  
-          const allEntries = Object.entries(this.state.moodHistory).flatMap(([date, periods]) =>  
-            Object.entries(periods).map(([period, data]) => ({ date, period, ...data }))  
-          ).sort((a, b) => new Date(a.date) - new Date(b.date));  
-  
-          const chartConfigs = {  
-            trend: {  
-              title: '📊 30-Day Trend',  
-              explanation: 'Your emotional journey over the last 30 days. Each point is colored by its specific mood.'  
-            },  
-            frequency: {  
-              title: 'Mood Frequency',  
-              explanation: 'A breakdown of your most common moods, making it easy to see which feelings dominate.'  
-            },  
-            weekly: {  
-              title: 'Weekly Rhythm',  
-              explanation: 'Reveals the "shape" of your typical week by plotting the average mood for each day.'  
-            },  
-            dayNight: {  
-              title: '☀️ AM vs. PM Average',  
-              explanation: 'A direct comparison of your average mood score in the morning versus the evening.'  
-            }  
-          };  
-  
-          this.dom.chartTabsContainer.innerHTML = Object.keys(chartConfigs).map(key => `  
-            <button class="chart-tabs__button ${this.state.historyViewState.activeChartTab === key ? 'active' : ''}"  
-                    data-action="switch-chart-tab" data-tab="${key}">  
-              ${chartConfigs[key].title}  
-            </button>  
-          `).join('');  
-  
-          if (allEntries.length < 2) {  
-            this.dom.historyChartsContainer.innerHTML = `  
-              <div class="chart-panel active" style="text-align:center; padding: 2rem;">  
-                Not enough data to generate charts. Keep tracking your mood!  
-              </div>`;  
-            return;  
-          }  
-  
-          // Build container for each chart tab  
-          this.dom.historyChartsContainer.innerHTML = Object.keys(chartConfigs).map(key => `  
-            <div class="chart-panel ${this.state.historyViewState.activeChartTab === key ? 'active' : ''}"  
-                 id="${key}-panel" data-tab-panel="${key}">  
-              <div class="chart-container">  
-                <canvas id="${key}Chart"></canvas>  
-              </div>  
-              <p class="chart-explanation">${chartConfigs[key].explanation}</p>  
-            </div>  
-          `).join('');  
-  
-          const moodMap = new Map(this.config.moods.map(m => [m.emoji, m]));  
-          const scoreMap = new Map(this.config.moods.map(m => [m.score, m]));  
-          const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary');  
-          const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');  
-  
-          // Clean up existing charts  
-          Object.values(this.state.charts).forEach(chart => chart.destroy());  
-  
-          // --- Chart 1: 30-Day Trend ---  
-          const thirtyDaysAgo = new Date();  
-          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);  
-          const recentEntries = allEntries.filter(e => new Date(e.date) >= thirtyDaysAgo);  
-  
-          this.state.charts.trend = new Chart('trendChart', {  
-            type: 'line',  
-            data: {  
-              labels: recentEntries.map(e =>  
-                `${new Date(e.date + 'T00:00:00')  
-                  .toLocaleDateString(undefined,{month:'short', day:'numeric'})} ${e.period}`  
-              ),  
-              datasets: [{  
-                label: 'Mood Score',  
-                data: recentEntries.map(e => moodMap.get(e.mood)?.score),  
-                tension: 0.4,  
-                fill: true,  
-                backgroundColor: 'hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1)',  
-                borderColor: 'hsl(var(--primary-hue), var(--primary-sat), var(--primary-light))',  
-                pointBorderColor: 'var(--surface-color)',  
-                pointBorderWidth: 2,  
-                pointRadius: 5,  
-                pointHoverRadius: 8,  
-                pointBackgroundColor: (ctx) => scoreMap.get(ctx.raw)?.color || 'grey'  
-              }]  
-            },  
-            options: {  
-              scales: {  
-                y: {  
-                  beginAtZero: false,  
-                  min: 0.5, max: 4.5,  
-                  ticks: {  
-                    stepSize: 1, color: textColor,  
-                    callback: val => scoreMap.get(val)?.emoji || ''  
-                  },  
-                  grid: { color: gridColor }  
-                },  
-                x: {  
-                  ticks: { color: textColor },  
-                  grid: { color: gridColor }  
-                }  
-              },  
-              plugins: {  
-                legend: { display: false },  
-                tooltip: {  
-                  callbacks: {  
-                    label: (ctx) => {  
-                      const mood = scoreMap.get(ctx.parsed.y);  
-                      return mood ? `${mood.emoji} ${mood.desc}` : '';  
-                    }  
-                  }  
-                }  
-              }  
-            }  
-          });  
-  
-          // --- Chart 2: Mood Frequency ---  
-          const moodCounts = this.config.moods.map(m => ({ ...m, count: 0 })).reverse();  
-          allEntries.forEach(e => {  
-            const mood = moodCounts.find(m => m.emoji === e.mood);  
-            if (mood) mood.count++;  
-          });  
-          this.state.charts.frequency = new Chart('frequencyChart', {  
-            type: 'bar',  
-            data: {  
-              labels: moodCounts.map(m => `${m.emoji} ${m.desc}`),  
-              datasets: [{  
-                label: 'Entry Count',  
-                data: moodCounts.map(m => m.count),  
-                backgroundColor: moodCounts.map(m => m.color),  
-                borderColor: 'var(--surface-color)',  
-                borderWidth: 2,  
-                borderRadius: 4  
-              }]  
-            },  
-            options: {  
-              indexAxis: 'y',  
-              scales: {  
-                y: {  
-                  ticks: { color: textColor }  
-                },  
-                x: {  
-                  grid: { color: gridColor },  
-                  ticks: { color: textColor },  
-                  title: {  
-                    display: true,  
-                    text: 'Number of Entries',  
-                    color: textColor  
-                  }  
-                }  
-              },  
-              plugins: { legend: { display: false } }  
-            }  
-          });  
-  
-          // --- Chart 3: Weekly Rhythm (Radar) ---  
-          const weeklyData = Array(7).fill(0).map(() => ({ total: 0, count: 0 }));  
-          allEntries.forEach(e => {  
-            const day = new Date(e.date + 'T00:00:00').getDay();  
-            const score = moodMap.get(e.mood)?.score;  
-            if (score) {  
-              weeklyData[day].total += score;  
-              weeklyData[day].count++;  
-            }  
-          });  
-          this.state.charts.weekly = new Chart('weeklyChart', {  
-            type: 'radar',  
-            data: {  
-              labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],  
-              datasets: [{  
-                label: 'Average Mood',  
-                data: weeklyData.map(d => d.count > 0 ? d.total / d.count : 0),  
-                backgroundColor: 'hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.4)',  
-                borderColor: 'hsl(var(--primary-hue), var(--primary-sat), var(--primary-light))',  
-                pointBackgroundColor: 'hsl(var(--primary-hue), var(--primary-sat), var(--primary-light))',  
-                pointBorderColor: '#fff',  
-                pointRadius: 5,  
-                pointHoverRadius: 8  
-              }]  
-            },  
-            options: {  
-              scales: {  
-                r: {  
-                  min: 1, max: 4,  
-                  angleLines: { color: gridColor },  
-                  grid: { color: gridColor },  
-                  pointLabels: { color: textColor, font: { size: 12 } },  
-                  ticks: {  
-                    stepSize: 1, color: textColor,  
-                    backdropColor: 'transparent',  
-                    callback: val => scoreMap.get(val)?.emoji || ''  
-                  }  
-                }  
-              },  
-              plugins: { legend: { display: false } }  
-            }  
-          });  
-  
-          // --- Chart 4: AM vs PM ---  
-          const dayNightData = { am: { total: 0, count: 0 }, pm: { total: 0, count: 0 } };  
-          allEntries.forEach(e => {  
-            const score = moodMap.get(e.mood)?.score;  
-            if (score) {  
-              if (e.period === 'AM') {  
-                dayNightData.am.total += score;  
-                dayNightData.am.count++;  
-              } else {  
-                dayNightData.pm.total += score;  
-                dayNightData.pm.count++;  
-              }  
-            }  
-          });  
-          const amAvg = dayNightData.am.count > 0 ? (dayNightData.am.total / dayNightData.am.count) : 0;  
-          const pmAvg = dayNightData.pm.count > 0 ? (dayNightData.pm.total / dayNightData.pm.count) : 0;  
-          this.state.charts.dayNight = new Chart('dayNightChart', {  
-            type: 'bar',  
-            data: {  
-              labels: [  
-                `☀️ Morning (${dayNightData.am.count} entries)`,  
-                `🌙 Evening (${dayNightData.pm.count} entries)`  
-              ],  
-              datasets: [{  
-                label: 'Average Mood Score',  
-                data: [amAvg, pmAvg],  
-                backgroundColor: [  
-                  'hsla(48, 100%, 70%, 0.8)',  
-                  'hsla(240, 60%, 70%, 0.8)'  
-                ],  
-                borderColor: 'var(--surface-color)',  
-                borderWidth: 2,  
-                borderRadius: 4  
-              }]  
-            },  
-            options: {  
-              scales: {  
-                y: {  
-                  min: 0, max: 4.5,  
-                  grid: { color: gridColor },  
-                  ticks: {  
-                    stepSize: 1, color: textColor,  
-                    callback: val => scoreMap.get(val)?.emoji || ''  
-                  }  
-                },  
-                x: { ticks: { color: textColor } }  
-              },  
-              plugins: {  
-                legend: { display: false },  
-                tooltip: {  
-                  callbacks: {  
-                    label: ctx => ` Average Score: ${ctx.parsed.y.toFixed(2)}`  
-                  }  
-                }  
-              }  
-            }  
-          });  
-        },  
-  
-        renderHistoryTable() {  
-          const { currentPage, itemsPerPage, sortBy, sortOrder } = this.state.historyViewState;  
-          let allDays = Object.keys(this.state.moodHistory).map(date => ({  
-            date,  
-            am: this.state.moodHistory[date].AM,  
-            pm: this.state.moodHistory[date].PM  
-          }));  
-  
-          allDays.sort((a, b) => sortOrder === 'asc'  
-            ? new Date(a.date) - new Date(b.date)  
-            : new Date(b.date) - new Date(a.date)  
-          );  
-  
-          const totalPages = Math.ceil(allDays.length / itemsPerPage);  
-          const startIndex = (currentPage - 1) * itemsPerPage;  
-          const paginatedData = allDays.slice(startIndex, startIndex + itemsPerPage);  
-  
-          let tableHTML = `<table class="history-table"><thead><tr>`;  
-          const indicator = sortBy === 'date' ? (sortOrder === 'asc' ? '▲' : '▼') : '';  
-          tableHTML += `<th data-sort="date" class="${sortBy === 'date' ? 'sort-active' : ''}">Date <span class="sort-indicator">${indicator}</span></th>`;  
-          tableHTML += `<th>☀️ Morning</th><th>🌙 Evening</th></tr></thead><tbody>`;  
-  
-          if (paginatedData.length === 0) {  
-            tableHTML += `<tr><td colspan="3" style="text-align: center; padding: 2rem;">No history found.</td></tr>`;  
-          } else {  
-            paginatedData.forEach(({ date, am, pm }) => {  
-              const hasNotes = (am?.note?.trim()) || (pm?.note?.trim());  
-              tableHTML += `  
-                <tr class="entry-row" data-action="toggle-notes" data-has-notes="${!!hasNotes}">  
-                  <td>${new Date(date + 'T00:00:00')  
-                    .toLocaleDateString(undefined, {weekday: 'short', month: 'short', day: 'numeric'})}</td>  
-                  <td class="mood-emoji">${am?.mood || '—'}</td>  
-                  <td class="mood-emoji">${pm?.mood || '—'}</td>  
-                </tr>`;  
-              if (hasNotes) {  
-                tableHTML += `  
-                  <tr class="notes-row">  
-                    <td colspan="3">  
-                      <div class="notes-content">  
-                        ${am?.note ? `<p><b>☀️ AM:</b> ${am.note.trim()}</p>` : ''}  
-                        ${pm?.note ? `<p><b>🌙 PM:</b> ${pm.note.trim()}</p>` : ''}  
-                      </div>  
-                    </td>  
-                  </tr>`;  
-              }  
-            });  
-          }  
-          tableHTML += `</tbody></table>`;  
-  
-          this.dom.historyBody.innerHTML = tableHTML;  
-  
-          let paginationHTML = `  
-              <div class="pagination-status">  
-                Showing ${startIndex + 1}-${Math.min(startIndex + itemsPerPage, allDays.length)} of ${allDays.length} days  
-              </div>  
-              <div class="pagination-buttons">  
-                <button class="button" data-action="prev-page" ${currentPage === 1 ? 'disabled' : ''}>&larr; Prev</button>  
-                <button class="button" data-action="next-page" ${currentPage >= totalPages ? 'disabled' : ''}>Next &rarr;</button>  
-              </div>`;  
-          this.dom.paginationControls.innerHTML = totalPages > 1 ? paginationHTML : '';  
-        },  
-  
-        addEventListeners() {  
-          document.body.addEventListener('click', this.handleDelegatedClick.bind(this));  
-          document.body.addEventListener('input', this.handleDelegatedInput.bind(this));  
-          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {  
-            window.addEventListener('mousemove', this.handleMouseMove.bind(this));  
-          }  
-        },  
-  
-        handleAction(action, target) {  
-          switch(action) {  
-            case 'show-history':  
-              this.renderHistoryCharts();  
-              this.renderHistoryTable();  
-              this.dom.historyDialog.showModal();  
-              document.body.classList.add('modal-open');  
-              break;  
-            case 'close-dialog':  
-              target.closest('dialog').close();  
-              document.body.classList.remove('modal-open');  
-              break;  
-            case 'import-csv':  
-              this.dom.csvImportInput.click();  
-              break;  
-            case 'export-csv':  
-              this.exportData.showPreview();  
-              break;  
-            case 'confirm-export':  
-              this.exportData.downloadCSV();  
-              this.dom.csvPreviewDialog.close();  
-              document.body.classList.remove('modal-open');  
-              break;  
-            case 'next-page':  
-              this.state.historyViewState.currentPage++;  
-              this.renderHistoryTable();  
-              break;  
-            case 'prev-page':  
-              this.state.historyViewState.currentPage--;  
-              this.renderHistoryTable();  
-              break;  
-            case 'toggle-notes': {  
-              const row = target.closest('.entry-row');  
-              const notesRow = row.nextElementSibling;  
-              if (notesRow && notesRow.classList.contains('notes-row')) {  
-                notesRow.style.display = notesRow.style.display === 'table-row' ? 'none' : 'table-row';  
-                row.classList.toggle('notes-visible', notesRow.style.display === 'table-row');  
-              }  
-              break;  
-            }  
-            case 'switch-chart-tab': {  
-              const tab = target.dataset.tab;  
-              this.state.historyViewState.activeChartTab = tab;  
-  
-              this.dom.chartTabsContainer.querySelectorAll('.chart-tabs__button').forEach(btn => btn.classList.remove('active'));  
-              target.classList.add('active');  
-  
-              this.dom.historyChartsContainer.querySelectorAll('.chart-panel').forEach(panel => panel.classList.remove('active'));  
-              document.getElementById(`${tab}-panel`).classList.add('active');  
-  
-              // Re-render the charts to fix sizing issues after hide/show  
-              this.renderHistoryCharts();  
-              break;  
-            }  
-            case 'toggle-header-controls': {  
-              // Expand/collapse the theme & history controls on mobile  
-              document.querySelector('.header-controls').classList.toggle('show');  
-              break;  
-            }  
-          }  
-        },  
-  
-        handleDelegatedClick(e) {  
-          const target = e.target;  
-          const action = target.closest('[data-action]')?.dataset.action;  
-          const date = target.closest('[data-date]')?.dataset.date;  
-          const mood = target.closest('[data-mood]')?.dataset.mood;  
-          const theme = target.closest('[data-theme]')?.dataset.theme;  
-          const sortKey = target.closest('[data-sort]')?.dataset.sort;  
-  
-          if (action) this.handleAction(action, target);  
-          if (date) {  
-            this.state.selectedDate = date;  
-            this.updateUI();  
-          }  
-          if (mood) this.updateMoodEntry('mood', mood);  
-          if (theme) {  
-            this.state.theme = theme;  
-            this.updateThemeUI();  
-            this.saveState();  
-          }  
-          if (sortKey) {  
-            if (this.state.historyViewState.sortBy === sortKey) {  
-              this.state.historyViewState.sortOrder = this.state.historyViewState.sortOrder === 'asc' ? 'desc' : 'asc';  
-            } else {  
-              this.state.historyViewState.sortBy = sortKey;  
-              this.state.historyViewState.sortOrder = 'desc';  
-            }  
-            this.renderHistoryTable();  
-          }  
-        },  
-  
-        handleDelegatedInput(e) {  
-          const target = e.target;  
-          if (target === this.dom.datePicker || target.matches('.period-toggle__input')) {  
-            this.state.selectedDate = this.dom.datePicker.value;  
-            this.state.period = document.querySelector('input[name="period"]:checked').value;  
-            this.updateUI();  
-          }  
-          else if (target === this.dom.moodNote) {  
-            this.updateMoodEntry('note', target.value);  
-          }  
-          else if (target === this.dom.csvImportInput) {  
-            this.importData.fromCSV(target.files[0]);  
-          }  
-        },  
-  
-        handleMouseMove(e) {  
-          const { clientX, clientY } = e;  
-          const { innerWidth, innerHeight } = window;  
-          const x = clientX / innerWidth - 0.5;  
-          const y = clientY / innerHeight - 0.5;  
-          window.requestAnimationFrame(() => {  
-            this.dom.blobs.forEach((blob, i) => {  
-              const sensitivity = (i + 1) * 15 + 20;  
-              blob.style.setProperty('--x', `${-x * sensitivity}px`);  
-              blob.style.setProperty('--y', `${-y * sensitivity}px`);  
-            });  
-          });  
-        },  
-  
-        updateMoodEntry(key, value) {  
-          const { selectedDate, period } = this.state;  
-          if (!this.state.moodHistory[selectedDate]) this.state.moodHistory[selectedDate] = {};  
-          if (!this.state.moodHistory[selectedDate][period]) this.state.moodHistory[selectedDate][period] = {};  
-          this.state.moodHistory[selectedDate][period][key] = value;  
-  
-          // Clean up if user removes mood+note entirely  
-          if (  
-            !this.state.moodHistory[selectedDate][period].mood &&  
-            !(this.state.moodHistory[selectedDate][period].note || '').trim()  
-          ) {  
-            delete this.state.moodHistory[selectedDate][period];  
-            if (Object.keys(this.state.moodHistory[selectedDate]).length === 0) {  
-              delete this.state.moodHistory[selectedDate];  
-            }  
-          }  
-          this.saveState();  
-          this.renderWeekCalendar();  
-          this.renderCurrentMoodEntry();  
-        },  
-  
-        exportData: {  
-          showPreview() {  
-            const historyArray = Object.entries(App.state.moodHistory).flatMap(([date, periods]) =>  
-              Object.entries(periods).map(([period, data]) => ({  
-                date,  
-                period,  
-                mood: data.mood || '',  
-                note: data.note || ''  
-              }))  
-            );  
-            if (historyArray.length === 0) {  
-              alert("No history to export.");  
-              return;  
-            }  
-            historyArray.sort((a,b) => new Date(b.date) - new Date(a.date));  
-            App.state.csvData = Papa.unparse(historyArray);  
-  
-            const previewData = Papa.unparse(historyArray.slice(0, 10));  
-            App.dom.csvPreviewContent.textContent = previewData;  
-            App.dom.csvPreviewDialog.showModal();  
-            document.body.classList.add('modal-open');  
-          },  
-          downloadCSV() {  
-            if (!App.state.csvData) return;  
-            const blob = new Blob([App.state.csvData], { type: 'text/csv;charset=utf-8;' });  
-            const link = document.createElement("a");  
-            const url = URL.createObjectURL(blob);  
-            link.setAttribute("href", url);  
-            link.setAttribute("download", `m00d-matrix-export-${new Date().toISOString().split('T')[0]}.csv`);  
-            link.style.visibility = 'hidden';  
-            document.body.appendChild(link);  
-            link.click();  
-            document.body.removeChild(link);  
-            App.state.csvData = '';  
-          }  
-        },  
-  
-        importData: {  
-          fromCSV(file) {  
-            if (!file) return;  
-            Papa.parse(file, {  
-              header: true,  
-              skipEmptyLines: true,  
-              complete: (results) => {  
-                try {  
-                  const newHistory = { ...App.state.moodHistory };  
-                  results.data.forEach(row => {  
-                    if (row.date && row.period && (row.mood || row.note)) {  
-                      if (!newHistory[row.date]) newHistory[row.date] = {};  
-                      newHistory[row.date][row.period] = { mood: row.mood, note: row.note };  
-                    }  
-                  });  
-                  App.state.moodHistory = newHistory;  
-                  App.saveState();  
-                  App.updateUI();  
-                  alert(`${results.data.length} rows processed. Your mood history has been updated.`);  
-                  App.dom.historyDialog.close();  
-                  document.body.classList.remove('modal-open');  
-                } catch (error) {  
-                  console.error("Error processing CSV:", error);  
-                  alert("There was an error processing the CSV file.");  
-                }  
-              },  
-              error: (err) => {  
-                alert(`Error parsing CSV file: ${err.message}`);  
-              }  
-            });  
-          }  
-        }  
-      };  
-  
-      App.init();  
-    });  
-  </script>  
-</body>  
-</html>  
+<!DOCTYPE html>
+<html lang="en" data-theme="magic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m00d matrix | personal mood tracking</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0288d1"/>
+  
+  <style>
+    /* 1. Design System & Themes */
+    :root, [data-theme="magic"] {
+      --primary-hue: 207; --primary-sat: 96%; --primary-light: 41%;
+      --bg-grad-1: #e0f7fa; --bg-grad-2: #e1f5fe; --bg-grad-3: #e8eaf6;
+      --surface-color: rgba(255, 255, 255, 0.6);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --surface-blur: 10px;
+      --particle-color: rgba(2, 136, 209, 0.5);
+      --text-primary: #0d47a1;
+      --text-secondary: #1565c0;
+      --border-color: rgba(179, 229, 252, 0.7);
+      --primary-color: hsl(var(--primary-hue), var(--primary-sat), var(--primary-light));
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 80%, 55%) 0%, #039be5 100%);
+      --secondary-gradient: linear-gradient(135deg, #8e24aa 0%, #d81b60 100%);
+      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);
+    }
+  
+    [data-theme="cosmic"] {
+      --primary-hue: 259; --primary-sat: 80%; --primary-light: 67%;
+      --bg-grad-1: #00000c; --bg-grad-2: #0c001e; --bg-grad-3: #110729;
+      --surface-color: rgba(20, 15, 35, 0.65);
+      --input-bg: rgba(20, 15, 35, 0.85);
+      --surface-blur: 12px;
+      --particle-color: rgba(139, 92, 246, 0.5);
+      --text-primary: #e3e4fa;
+      --text-secondary: #a4a6f9;
+      --border-color: rgba(87, 72, 138, 0.7);
+      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);
+    }
+  
+    [data-theme="golden"] {
+      --primary-hue: 39; --primary-sat: 100%; --primary-light: 50%;
+      --bg-grad-1: #fff8e1; --bg-grad-2: #ffecb3; --bg-grad-3: #fff3e0;
+      --surface-color: rgba(255, 250, 237, 0.6);
+      --input-bg: rgba(255, 250, 237, 0.8);
+      --surface-blur: 10px;
+      --particle-color: rgba(255, 143, 0, 0.5);
+      --text-primary: #4e342e;
+      --text-secondary: #8d6e63;
+      --border-color: rgba(255, 224, 178, 0.7);
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 100%, 60%) 0%, #fb8c00 100%);
+    }
+  
+    [data-theme="biolume"] {
+      --primary-hue: 188; --primary-sat: 78%; --primary-light: 47%;
+      --bg-grad-1: #001c22; --bg-grad-2: #00313a; --bg-grad-3: #012a30;
+      --surface-color: rgba(5, 45, 55, 0.65);
+      --input-bg: rgba(5, 45, 55, 0.85);
+      --surface-blur: 14px;
+      --particle-color: rgba(34, 184, 207, 0.5);
+      --text-primary: #c5f6fa;
+      --text-secondary: #66d9e8;
+      --border-color: rgba(38, 78, 69, 0.7);
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 85%, 55%) 0%, #4dd0e1 100%);
+      --shadow-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);
+    }
+  
+    [data-theme="neko"] {
+      --primary-hue: 337; --primary-sat: 78%; --primary-light: 50%;
+      --bg-grad-1: #fce4ec; --bg-grad-2: #f8bbd0; --bg-grad-3: #fce4ec;
+      --surface-color: rgba(255, 240, 245, 0.65);
+      --input-bg: rgba(255, 240, 245, 0.85);
+      --surface-blur: 12px;
+      --particle-color: rgba(216, 27, 96, 0.5);
+      --text-primary: #880e4f;
+      --text-secondary: #ec407a;
+      --border-color: rgba(244, 143, 177, 0.7);
+      --primary-gradient: linear-gradient(135deg, hsl(var(--primary-hue), 80%, 60%) 0%, #f06292 100%);
+    }
+  
+    :root {
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --success-color: #22c55e;
+      --danger-color: #ef4444;
+    }
+  
+    /* Reset & base styles */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      animation: gradientMagic 20s ease infinite;
+      background: linear-gradient(125deg, var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3));
+      background-size: 200% 200%;
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      margin: 0;
+      min-height: 100vh;
+      padding: 0;
+      transition: background 0.8s ease, color 0.8s ease;
+    }
+    @keyframes gradientMagic {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body.modal-open { overflow: hidden; }
+    h1, h2, h3, p, label, div, span, td, th {
+      margin: 0;
+      transition: color 0.4s ease;
+    }
+
+    /* 2. Blobs & Background Effects */
+    #blob-container {
+      overflow: hidden;
+      pointer-events: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .blob {
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.6;
+      position: absolute;
+      will-change: transform;
+      transform: translate(var(--x, 0px), var(--y, 0px));
+    }
+    .blob:nth-child(1) {
+      animation: move-blob-1 25s infinite alternate ease-in-out;
+      background: hsla(var(--primary-hue), var(--primary-sat), calc(var(--primary-light) + 10%), 0.5);
+      height: 80vmin;
+      left: -10%;
+      top: -10%;
+      width: 80vmin;
+    }
+    .blob:nth-child(2) {
+      animation: move-blob-2 30s infinite alternate ease-in-out;
+      background: hsla(calc(var(--primary-hue) + 120), var(--primary-sat), var(--primary-light), 0.5);
+      height: 60vmin;
+      left: 60%;
+      top: 50%;
+      width: 60vmin;
+    }
+    .blob:nth-child(3) {
+      animation: move-blob-3 22s infinite alternate ease-in-out;
+      background: hsla(calc(var(--primary-hue) - 120), var(--primary-sat), var(--primary-light), 0.4);
+      height: 50vmin;
+      left: 10%;
+      top: 60%;
+      width: 50vmin;
+    }
+    @keyframes move-blob-1 { to { transform: translate(var(--x), var(--y)) scale(1.2) translate(-20vw, 15vh) rotate(180deg); } }
+    @keyframes move-blob-2 { to { transform: translate(var(--x), var(--y)) scale(0.8) translate(15vw, 20vh) rotate(-180deg); } }
+    @keyframes move-blob-3 { to { transform: translate(var(--x), var(--y)) scale(1.1) translate(20vw, -25vh) rotate(90deg); } }
+  
+    /* 3. Header */
+    .main-header {
+      align-items: center;
+      backdrop-filter: blur(var(--surface-blur));
+      border: 1px solid var(--border-color);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+    }
+    @media (min-width: 900px) {
+      .main-header {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+    .header-content {
+      align-items: center;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    @media (min-width: 900px) {
+      .header-content { justify-content: flex-start; }
+    }
+    .header-card__logo {
+      animation: float-breath 6s ease-in-out infinite;
+      height: 54px;
+      margin-bottom: 0;
+      transition: filter 0.3s ease;
+      width: 54px;
+    }
+    @media (min-width: 900px) {
+      .header-card__logo {
+        height: 80px;
+        width: 80px;
+      }
+    }
+    .header-card__title {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.4rem;
+    }
+    @media (min-width: 900px) {
+      .header-card__title { font-size: 1.8rem; }
+    }
+    .main-header:hover .header-card__logo {
+      filter: drop-shadow(0 8px 30px hsla(var(--primary-hue), 50%, 50%, 0.4));
+    }
+    .header-toggle {
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .header-toggle:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+    .header-toggle:active:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transform: translateY(0);
+    }
+    @media (min-width: 900px) {
+      .header-toggle { display: none; }
+    }
+    .header-controls {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      padding: 0 1rem;
+      pointer-events: none;
+      transition: max-height 0.35s ease, opacity 0.35s ease;
+    }
+    .header-controls.show {
+      max-height: 700px;
+      opacity: 1;
+      padding: 1rem;
+      pointer-events: auto;
+    }
+    @media (min-width: 900px) {
+      .header-controls {
+        align-items: center;
+        flex-direction: row;
+        gap: 1rem;
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+        padding: 0;
+        pointer-events: auto !important;
+      }
+      .header-controls.show { padding: 0; }
+    }
+    .main-content {
+      display: block;
+      margin-inline: auto;
+      margin-top: 11rem;
+      max-width: 1200px;
+      padding: 1rem;
+    }
+    @media (min-width: 900px) {
+      .main-content { margin-top: 8rem; }
+    }
+
+    /* 4. Cards */
+    .card {
+      backdrop-filter: blur(var(--surface-blur));
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      contain: layout style;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;
+    }
+    .card:hover {
+      box-shadow: 0 10px 30px var(--shadow-color);
+      transform: translateY(-4px);
+    }
+    .card__title {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+  
+    /* 5. Buttons */
+    .button {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: inline-flex;
+      font: 500 0.9rem/1 var(--font-family);
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.2s ease;
+    }
+    @media (min-width: 900px) {
+      .button { width: auto; }
+    }
+    .button:hover:not(:disabled) {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+    .button:active:not(:disabled) {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transform: translateY(0);
+    }
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .button--primary { background: var(--primary-gradient); color: white; }
+    .button--secondary { background: var(--secondary-gradient); color: white; }
+    .button--success { background-color: var(--success-color); color: white; }
+    .button--danger { background-color: var(--danger-color); color: white; }
+    .button--insights {
+      background: linear-gradient(135deg, #7c4dff 0%, #a255ff 100%);
+      color: white;
+    }
+  
+    /* 6. Form Inputs */
+    .form-input {
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      font-size: 1rem;
+      padding: 0.75rem;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    .form-input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.8;
+    }
+    .form-input:focus-visible {
+      border-color: transparent;
+      box-shadow: 0 0 0 4px var(--shadow-color);
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+  
+    /* 7. Header Animations */
+    @keyframes float-breath {
+      0%, 100% {
+        filter: drop-shadow(0 5px 15px var(--shadow-color));
+        transform: translateY(0px) scale(1);
+      }
+      50% {
+        filter: drop-shadow(0 8px 25px var(--shadow-color));
+        transform: translateY(-8px) scale(1.05);
+      }
+    }
+  
+    /* 8. Date Navigator & Calendar */
+    .date-navigator {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .period-toggle {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      overflow: hidden;
+      transition: border-color 0.4s ease;
+    }
+    .period-toggle__label {
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: all 0.3s ease;
+    }
+    .period-toggle__input { display: none; }
+    .period-toggle__input:checked + .period-toggle__label {
+      background: var(--primary-gradient);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+      color: white;
+    }
+    .week-calendar__table {
+      border-collapse: separate;
+      border-spacing: 5px;
+      width: 100%;
+    }
+    .week-calendar__day {
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      padding: 0.5rem;
+      text-align: center;
+      transition: background-color 0.2s;
+    }
+    .week-calendar__day:hover {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);
+    }
+    .week-calendar__day--selected {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.2);
+      font-weight: 600;
+    }
+    .week-calendar__date {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    .week-calendar__dots {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-top: 4px;
+      min-height: 1em;
+    }
+  
+    /* 9. Mood Selector */
+    .mood-selector { text-align: center; }
+    .mood-selector__prompt {
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-height: 1.1em;
+      margin: 0.5rem 0 1rem;
+    }
+    @media (min-width: 900px) {
+      .mood-selector__prompt {
+        font-size: 1.25rem;
+        margin: 0.5rem 0 1.5rem;
+        min-height: 1.25em;
+      }
+    }
+    .mood-selector__emojis {
+      display: flex;
+      justify-content: space-around;
+    }
+    .mood-selector__button {
+      background: none;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 2.2rem;
+      padding: 0.5rem;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    @media (min-width: 900px) {
+      .mood-selector__button { font-size: 2.8rem; }
+    }
+    .mood-selector__button:hover { transform: scale(1.15); }
+    .mood-selector__button--selected {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.2);
+      transform: scale(1.1);
+    }
+  
+    /* 10. Theme Switcher */
+    .theme-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .theme-swatch {
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+      height: 32px;
+      position: relative;
+      transition: all 0.2s ease;
+      width: 32px;
+    }
+    .theme-swatch:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transform: scale(1.15);
+    }
+    .theme-swatch.active {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--primary-color);
+      transform: scale(1.1);
+    }
+    .theme-swatch.active::after {
+      align-items: center;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px var(--surface-color);
+      color: #fff;
+      content: "✓";
+      display: flex;
+      font-weight: 600;
+      height: 24px;
+      justify-content: center;
+      position: absolute;
+      right: -8px;
+      top: -8px;
+      transition: transform 0.2s ease;
+      width: 24px;
+    }
+  
+    /* 11. Dialog (Modal) */
+    .dialog {
+      backdrop-filter: blur(var(--surface-blur));
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 30px var(--shadow-color);
+      max-height: 90vh;
+      max-width: 800px;
+      padding: 0;
+      width: 95%;
+    }
+    .dialog::backdrop {
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .dialog[open] {
+      animation: fadeIn 0.3s ease-out;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+    }
+    .dialog__header, .dialog__body, .dialog__footer { padding: 1rem 1.5rem; }
+    @media (min-width: 900px) {
+      .dialog__header, .dialog__body, .dialog__footer { padding: 1.5rem 2rem; }
+    }
+    .dialog__header {
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+    }
+    .dialog__title { 
+      font-size: 1.25rem;
+      color: var(--text-primary);
+    }
+    @media (min-width: 900px) {
+      .dialog__title { font-size: 1.5rem; }
+    }
+    .dialog__close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 2rem;
+      line-height: 1;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .dialog__close:hover {
+      color: var(--primary-color);
+      transform: rotate(90deg);
+    }
+    .dialog__body {
+      color: var(--text-primary);
+      overflow-y: auto;
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+    .dialog__footer {
+      background-color: hsla(0, 0%, 100%, 0.05);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  
+    /* 12. History & Chart */
+    .chart-tabs {
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 1rem 1.5rem 0;
+    }
+    @media (min-width: 900px) {
+      .chart-tabs { padding: 1rem 2rem 0; }
+    }
+    .chart-tabs__button {
+      background-color: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      border-radius: 8px 8px 0 0;
+      color: var(--text-secondary);
+      cursor: pointer;
+      flex-grow: 1;
+      font-family: var(--font-family);
+      font-size: 0.8rem;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    @media (min-width: 900px) {
+      .chart-tabs__button {
+        flex-grow: 0;
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+      }
+    }
+    .chart-tabs__button:hover {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);
+    }
+    .chart-tabs__button.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    .chart-panel {
+      display: none;
+      padding: 1.5rem;
+    }
+    @media (min-width: 900px) {
+      .chart-panel { padding: 2rem; }
+    }
+    .chart-panel.active {
+      animation: fadeIn 0.4s;
+      display: block;
+    }
+    .chart-container {
+      margin-inline: auto;
+      max-width: 500px;
+      position: relative;
+    }
+    .chart-title {
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .chart-explanation {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      line-height: 1.4;
+      margin-inline: auto;
+      margin-top: 0.75rem;
+      max-width: 350px;
+      text-align: center;
+    }
+    .history-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .history-table th, .history-table td {
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      padding: 12px 16px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    @media (min-width: 900px) {
+      .history-table th, .history-table td { font-size: 1rem; }
+    }
+    .history-table th {
+      font-weight: 600;
+      user-select: none;
+    }
+    .history-table th[data-sort]:hover {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);
+      cursor: pointer;
+    }
+    .history-table th.sort-active { color: var(--primary-color); }
+    .history-table th .sort-indicator {
+      display: inline-block;
+      margin-left: 8px;
+      opacity: 0.6;
+    }
+    .history-table tr.entry-row[data-has-notes="true"] { cursor: pointer; }
+    .history-table tr.entry-row[data-has-notes="true"]:hover {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.05);
+    }
+    .history-table tr.entry-row.notes-visible {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1);
+    }
+    .history-table tr.notes-row { display: none; }
+    .history-table .notes-content {
+      background-color: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.05);
+      font-size: 0.9rem;
+      padding: 1rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .history-table .notes-content p {
+      margin: 0 0 0.5rem;
+      font-size: 0.9rem;
+    }
+    .history-table .notes-content p:last-child { margin-bottom: 0; }
+    .history-table .mood-emoji { font-size: 1.5rem; }
+    .pagination-controls {
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+    }
+    @media (min-width: 900px) {
+      .pagination-controls {
+        flex-direction: row;
+        padding: 1rem 2rem;
+      }
+    }
+    .pagination-status {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .pagination-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .pagination-buttons .button { width: auto; }
+    .csv-preview {
+      background-color: hsla(var(--primary-hue), 5%, 50%, 0.1);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: monospace;
+      font-size: 0.8rem;
+      max-height: 200px;
+      overflow-x: auto;
+      padding: 1rem;
+      white-space: pre;
+    }
+
+    /* 13. AI Dialog */
+    .ai-response-content {
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 1.5rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .ai-response-content h3 {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .ai-response-content strong { color: var(--text-primary); }
+    
+    /* New animation styles */
+    .ai-spinner-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+      padding: 3rem 0;
+      min-height: 150px; /* Prevent content from jumping */
+      transition: opacity 0.3s ease;
+    }
+
+    .ai-spinner {
+      width: 60px;
+      height: 60px;
+    }
+
+    .ai-spinner-text {
+      font-weight: 500;
+      color: var(--text-secondary);
+      animation: pulseText 2s infinite;
+    }
+    
+    @keyframes pulseText {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+  </style>
+</head>
+<body>
+  
+  <div id="blob-container">
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+  </div>
+  
+  <header class="main-header card">
+    <div class="header-content">
+      <svg class="header-card__logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="orbGradient" cx="40%" cy="40%" r="60%">
+            <stop offset="0%" style="stop-color: hsla(var(--primary-hue), var(--primary-sat), 80%, 1);" />
+            <stop offset="100%" style="stop-color: var(--primary-color);" />
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="40" fill="url(#orbGradient)" />
+      </svg>
+      <h1 class="header-card__title">m00d matrix</h1>
+      <button class="header-toggle" data-action="toggle-header-controls" aria-label="Expand Menu">Menu ☰</button>
+    </div>
+    <div class="header-controls">
+      <div class="theme-switcher" id="theme-switcher">
+        <button class="theme-swatch" data-theme="magic" style="background: linear-gradient(135deg, #0288d1, #039be5);" aria-label="Serene Sky Theme" title="Serene Sky"></button>
+        <button class="theme-swatch" data-theme="cosmic" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);" aria-label="Cosmic Rift Theme" title="Cosmic Rift"></button>
+        <button class="theme-swatch" data-theme="golden" style="background: linear-gradient(135deg, #ff8f00, #fb8c00);" aria-label="Golden Hour Theme" title="Golden Hour"></button>
+        <button class="theme-swatch" data-theme="biolume" style="background: linear-gradient(135deg, #22b8cf, #4dd0e1);" aria-label="Biolume Theme" title="Biolume"></button>
+        <button class="theme-swatch" data-theme="neko" style="background: linear-gradient(135deg, #d81b60, #f06292);" aria-label="Neko Spark Theme" title="Neko Spark"></button>
+      </div>
+      <button class="button button--primary" data-action="show-history">View History & Insights</button>
+    </div>
+  </header>
+  
+  <main class="main-content" id="app-container">
+    <div class="card">
+      <div class="date-navigator">
+        <div class="period-toggle" id="period-toggle" role="radiogroup" aria-label="Time of day">
+          <input class="period-toggle__input" type="radio" name="period" value="AM" id="period-am" checked>
+          <label class="period-toggle__label" for="period-am">☀️ Morning</label>
+          <input class="period-toggle__input" type="radio" name="period" value="PM" id="period-pm">
+          <label class="period-toggle__label" for="period-pm">🌙 Evening</label>
+        </div>
+        <input type="date" id="date-picker" class="form-input" style="width: auto;" aria-label="Select date">
+      </div>
+      <div id="week-calendar"></div>
+      <div class="mood-selector">
+        <h2 class="card__title" style="margin-bottom: 0;">How are you feeling?</h2>
+        <p class="mood-selector__prompt" id="mood-description" aria-live="polite"></p>
+        <div class="mood-selector__emojis" id="emojis-container" role="group" aria-label="Select your mood"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="card__title">m00d note</h2>
+      <textarea id="mood-note" class="form-input" rows="5" placeholder="What's on your mind? What are you grateful for?"></textarea>
+    </div>
+  </main>
+  
+  <dialog id="history-dialog" class="dialog">
+    <header class="dialog__header">
+      <h2 class="dialog__title">Mood History & Patterns</h2>
+      <button class="dialog__close" data-action="close-dialog" aria-label="Close dialog">&times;</button>
+    </header>
+    <div class="chart-tabs" id="chart-tabs-container"></div>
+    <div id="history-charts-container"></div>
+    <div class="dialog__body" id="history-body"></div>
+    <div id="pagination-controls" class="pagination-controls"></div>
+    <footer class="dialog__footer">
+      <button class="button button--insights" data-action="consult-ai">Consult with AI</button>
+      <button class="button button--secondary" data-action="import-csv">Import CSV</button>
+      <input type="file" id="csv-import-input" accept=".csv" style="display: none;">
+      <button class="button button--success" data-action="export-csv">Export CSV</button>
+      <button class="button button--danger" data-action="close-dialog">Close</button>
+    </footer>
+  </dialog>
+  <dialog id="csv-preview-dialog" class="dialog">
+    <header class="dialog__header">
+      <h2 class="dialog__title">Export Preview</h2>
+      <button class="dialog__close" data-action="close-dialog" aria-label="Close dialog">&times;</button>
+    </header>
+    <div class="dialog__body" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">A preview of the first 10 rows of your data is shown below.</p>
+      <pre id="csv-preview-content" class="csv-preview"></pre>
+    </div>
+    <footer class="dialog__footer">
+      <button class="button button--secondary" data-action="close-dialog">Cancel</button>
+      <button class="button button--success" data-action="confirm-export">Confirm & Download</button>
+    </footer>
+  </dialog>
+  <dialog id="ai-dialog" class="dialog">
+    <header class="dialog__header">
+      <h2 class="dialog__title">AI Mood Insights</h2>
+      <button class="dialog__close" data-action="close-dialog">&times;</button>
+    </header>
+    <div class="dialog__body" id="ai-response-body">
+      <div class="ai-spinner-container" id="ai-loading-state">
+        <svg class="ai-spinner" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="40" fill="none" stroke="var(--primary-color)" stroke-width="6" stroke-dasharray="250" stroke-dashoffset="0" opacity="0.4" />
+          <path d="M50 10 A40 40 0 0 1 50 90" fill="none" stroke="var(--primary-color)" stroke-width="6" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="1s" repeatCount="indefinite" />
+          </path>
+        </svg>
+        <p class="ai-spinner-text">Consulting the m00d matrix...</p>
+      </div>
+      <p id="ai-response-text" class="ai-response-content" style="display:none;"></p>
+    </div>
+    <footer class="dialog__footer">
+      <button class="button button--primary" data-action="close-dialog">Done</button>
+    </footer>
+  </dialog>
+
+  <script>
+    // PWA service worker registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => {
+            console.log('Service Worker registered! 😎', reg);
+          })
+          .catch(err => {
+            console.log('Service Worker registration failed: 😭', err);
+          });
+      });
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const App = {
+        // --- 1. CONFIGURATION (Constants & Static Data) ---
+        config: {
+          moods: [
+            { emoji: '😖', desc: 'Upset', score: 1, color: 'rgba(239, 68, 68, 0.8)' },
+            { emoji: '😔', desc: 'Not Happy', score: 2, color: 'rgba(249, 115, 22, 0.8)' },
+            { emoji: '😌', desc: 'Calm / Okay', score: 3, color: 'rgba(34, 197, 94, 0.8)' },
+            { emoji: '😎', desc: 'Very Happy', score: 4, color: 'rgba(59, 130, 246, 0.8)' }
+          ],
+          aiApiUrl: 'https://ranfysvalle02--orby-api-ai.modal.run/'
+        },
+        // --- 2. STATE (Dynamic Data) ---
+        state: {
+          moodHistory: {},
+          selectedDate: new Date().toISOString().split('T')[0],
+          period: new Date().getHours() < 12 ? 'AM' : 'PM',
+          theme: 'magic',
+          historyViewState: {
+            currentPage: 1, itemsPerPage: 10,
+            sortBy: 'date', sortOrder: 'desc',
+            activeChartTab: 'trend'
+          },
+          charts: {},
+          csvData: ''
+        },
+        // --- 3. DOM ELEMENTS (References for easy access) ---
+        dom: {
+          datePicker: document.getElementById('date-picker'),
+          weekCalendar: document.getElementById('week-calendar'),
+          moodDescription: document.getElementById('mood-description'),
+          emojisContainer: document.getElementById('emojis-container'),
+          moodNote: document.getElementById('mood-note'),
+          historyDialog: document.getElementById('history-dialog'),
+          historyBody: document.getElementById('history-body'),
+          csvImportInput: document.getElementById('csv-import-input'),
+          csvPreviewDialog: document.getElementById('csv-preview-dialog'),
+          csvPreviewContent: document.getElementById('csv-preview-content'),
+          themeSwitcher: document.getElementById('theme-switcher'),
+          blobs: document.querySelectorAll('.blob'),
+          paginationControls: document.getElementById('pagination-controls'),
+          historyChartsContainer: document.getElementById('history-charts-container'),
+          chartTabsContainer: document.getElementById('chart-tabs-container'),
+          aiDialog: document.getElementById('ai-dialog'),
+          aiResponseBody: document.getElementById('ai-response-body'),
+          aiResponseText: document.getElementById('ai-response-text'),
+          aiLoadingState: document.getElementById('ai-loading-state')
+        },
+  
+        // --- 4. CORE LOGIC (Initialization & Data Management) ---
+        init() {
+          this.loadState();
+          this.addEventListeners();
+          this.renderUI();
+          this.updateThemeUI();
+          this.renderMoodSelector();
+        },
+        loadState() {
+          this.state.moodHistory = JSON.parse(localStorage.getItem('moodHistory_v3')) || {};
+          this.state.theme = localStorage.getItem('moodTheme_v3') || 'magic';
+        },
+        saveState() {
+          localStorage.setItem('moodHistory_v3', JSON.stringify(this.state.moodHistory));
+          localStorage.setItem('moodTheme_v3', this.state.theme);
+        },
+  
+        // --- 5. UI RENDERING ---
+        renderUI() {
+          this.dom.datePicker.value = this.state.selectedDate;
+          document.querySelector(`input[name="period"]:checked`).checked = true;
+          this.renderWeekCalendar();
+          this.renderCurrentMoodEntry();
+        },
+        renderWeekCalendar() {
+          const selected = new Date(this.state.selectedDate + 'T00:00:00');
+          const dayOfWeek = selected.getDay();
+          let html = '<table class="week-calendar__table"><thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody><tr>';
+          for (let i = 0; i < 7; i++) {
+            const d = new Date(selected);
+            d.setDate(selected.getDate() - dayOfWeek + i);
+            const dayString = d.toISOString().split('T')[0];
+            const dayData = this.state.moodHistory[dayString] || {};
+            const amMood = dayData.AM?.mood || '·';
+            const pmMood = dayData.PM?.mood || '·';
+            const isSelectedClass = dayString === this.state.selectedDate ? 'week-calendar__day--selected' : '';
+            html += `
+              <td class="week-calendar__day ${isSelectedClass}" data-date="${dayString}">
+                <div class="week-calendar__date">${d.getDate()}</div>
+                <div class="week-calendar__dots"><span>${amMood}</span><span>${pmMood}</span></div>
+              </td>`;
+          }
+          html += '</tr></tbody></table>';
+          this.dom.weekCalendar.innerHTML = html;
+        },
+        renderMoodSelector() {
+          this.dom.emojisContainer.innerHTML = this.config.moods
+            .map(({ emoji, desc }) => `<button class="mood-selector__button" data-mood="${emoji}" aria-label="${desc}">${emoji}</button>`)
+            .join('');
+        },
+        renderCurrentMoodEntry() {
+          const { selectedDate, period } = this.state;
+          const entry = this.state.moodHistory[selectedDate]?.[period];
+          const currentMood = this.config.moods.find(m => m.emoji === entry?.mood);
+          this.dom.moodDescription.textContent = currentMood?.desc || 'Select a mood below';
+          this.dom.moodNote.value = entry?.note || '';
+          this.dom.emojisContainer.querySelectorAll('.mood-selector__button').forEach(btn => {
+            btn.classList.toggle('mood-selector__button--selected', btn.dataset.mood === currentMood?.emoji);
+          });
+        },
+        updateThemeUI() {
+          document.documentElement.dataset.theme = this.state.theme;
+          this.dom.themeSwitcher.querySelectorAll('.theme-swatch').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.theme === this.state.theme);
+          });
+        },
+        renderHistoryCharts() {
+          const allEntries = Object.entries(this.state.moodHistory).flatMap(([date, periods]) =>
+            Object.entries(periods).map(([period, data]) => ({ date, period, ...data }))
+          ).sort((a, b) => new Date(a.date) - new Date(b.date));
+          const chartConfigs = {
+            trend: { title: '📊 30-Day Trend', explanation: 'Your emotional journey over the last 30 days. Each point is colored by its specific mood.' },
+            frequency: { title: 'Mood Frequency', explanation: 'A breakdown of your most common moods, making it easy to see which feelings dominate.' },
+            weekly: { title: 'Weekly Rhythm', explanation: 'Reveals the "shape" of your typical week by plotting the average mood for each day.' },
+            dayNight: { title: '☀️ AM vs. PM Average', explanation: 'A direct comparison of your average mood score in the morning versus the evening.' }
+          };
+          this.dom.chartTabsContainer.innerHTML = Object.keys(chartConfigs).map(key => `
+            <button class="chart-tabs__button ${this.state.historyViewState.activeChartTab === key ? 'active' : ''}"
+                    data-action="switch-chart-tab" data-tab="${key}">
+              ${chartConfigs[key].title}
+            </button>
+          `).join('');
+          if (allEntries.length < 2) {
+            this.dom.historyChartsContainer.innerHTML = `<div class="chart-panel active" style="text-align:center; padding: 2rem;">Not enough data to generate charts. Keep tracking your mood!</div>`;
+            return;
+          }
+          this.dom.historyChartsContainer.innerHTML = Object.keys(chartConfigs).map(key => `
+            <div class="chart-panel ${this.state.historyViewState.activeChartTab === key ? 'active' : ''}"
+                 id="${key}-panel" data-tab-panel="${key}">
+              <div class="chart-container"><canvas id="${key}Chart"></canvas></div>
+              <p class="chart-explanation">${chartConfigs[key].explanation}</p>
+            </div>
+          `).join('');
+          const moodMap = new Map(this.config.moods.map(m => [m.emoji, m]));
+          const scoreMap = new Map(this.config.moods.map(m => [m.score, m]));
+          const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary');
+          const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');
+          Object.values(this.state.charts).forEach(chart => chart.destroy());
+          // Chart 1: 30-Day Trend
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          const recentEntries = allEntries.filter(e => new Date(e.date) >= thirtyDaysAgo);
+          this.state.charts.trend = new Chart('trendChart', {
+            type: 'line',
+            data: {
+              labels: recentEntries.map(e => `${new Date(e.date + 'T00:00:00').toLocaleDateString(undefined,{month:'short', day:'numeric'})} ${e.period}`),
+              datasets: [{
+                label: 'Mood Score',
+                data: recentEntries.map(e => moodMap.get(e.mood)?.score),
+                tension: 0.4, fill: true,
+                backgroundColor: 'hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.1)',
+                borderColor: 'hsl(var(--primary-hue), var(--primary-sat), var(--primary-light))',
+                pointBorderColor: 'var(--surface-color)', pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 8,
+                pointBackgroundColor: (ctx) => scoreMap.get(ctx.raw)?.color || 'grey'
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: false, min: 0.5, max: 4.5,
+                  ticks: { stepSize: 1, color: textColor, callback: val => scoreMap.get(val)?.emoji || '' },
+                  grid: { color: gridColor }
+                },
+                x: { ticks: { color: textColor }, grid: { color: gridColor } }
+              },
+              plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: (ctx) => { const mood = scoreMap.get(ctx.parsed.y); return mood ? `${mood.emoji} ${mood.desc}` : ''; } } }
+              }
+            }
+          });
+          // Chart 2: Mood Frequency
+          const moodCounts = this.config.moods.map(m => ({ ...m, count: 0 })).reverse();
+          allEntries.forEach(e => { const mood = moodCounts.find(m => m.emoji === e.mood); if (mood) mood.count++; });
+          this.state.charts.frequency = new Chart('frequencyChart', {
+            type: 'bar',
+            data: {
+              labels: moodCounts.map(m => `${m.emoji} ${m.desc}`),
+              datasets: [{
+                label: 'Entry Count',
+                data: moodCounts.map(m => m.count),
+                backgroundColor: moodCounts.map(m => m.color),
+                borderColor: 'var(--surface-color)', borderWidth: 2, borderRadius: 4
+              }]
+            },
+            options: {
+              indexAxis: 'y',
+              scales: {
+                y: { ticks: { color: textColor } },
+                x: { grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'Number of Entries', color: textColor } }
+              },
+              plugins: { legend: { display: false } }
+            }
+          });
+          // Chart 3: Weekly Rhythm (Radar)
+          const weeklyData = Array(7).fill(0).map(() => ({ total: 0, count: 0 }));
+          allEntries.forEach(e => {
+            const day = new Date(e.date + 'T00:00:00').getDay();
+            const score = moodMap.get(e.mood)?.score;
+            if (score) { weeklyData[day].total += score; weeklyData[day].count++; }
+          });
+          this.state.charts.weekly = new Chart('weeklyChart', {
+            type: 'radar',
+            data: {
+              labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+              datasets: [{
+                label: 'Average Mood',
+                data: weeklyData.map(d => d.count > 0 ? d.total / d.count : 0),
+                backgroundColor: 'hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.4)',
+                borderColor: 'hsl(var(--primary-hue), var(--primary-sat), var(--primary-light))',
+                pointBackgroundColor: 'hsl(var(--primary-hue), var(--primary-sat), var(--primary-light))',
+                pointBorderColor: '#fff', pointRadius: 5, pointHoverRadius: 8
+              }]
+            },
+            options: {
+              scales: {
+                r: {
+                  min: 1, max: 4,
+                  angleLines: { color: gridColor }, grid: { color: gridColor }, pointLabels: { color: textColor, font: { size: 12 } },
+                  ticks: { stepSize: 1, color: textColor, backdropColor: 'transparent', callback: val => scoreMap.get(val)?.emoji || '' }
+                }
+              },
+              plugins: { legend: { display: false } }
+            }
+          });
+          // Chart 4: AM vs PM
+          const dayNightData = { am: { total: 0, count: 0 }, pm: { total: 0, count: 0 } };
+          allEntries.forEach(e => {
+            const score = moodMap.get(e.mood)?.score;
+            if (score) {
+              if (e.period === 'AM') { dayNightData.am.total += score; dayNightData.am.count++; }
+              else { dayNightData.pm.total += score; dayNightData.pm.count++; }
+            }
+          });
+          const amAvg = dayNightData.am.count > 0 ? (dayNightData.am.total / dayNightData.am.count) : 0;
+          const pmAvg = dayNightData.pm.count > 0 ? (dayNightData.pm.total / dayNightData.pm.count) : 0;
+          this.state.charts.dayNight = new Chart('dayNightChart', {
+            type: 'bar',
+            data: {
+              labels: [`☀️ Morning (${dayNightData.am.count} entries)`, `🌙 Evening (${dayNightData.pm.count} entries)`],
+              datasets: [{
+                label: 'Average Mood Score',
+                data: [amAvg, pmAvg],
+                backgroundColor: ['hsla(48, 100%, 70%, 0.8)', 'hsla(240, 60%, 70%, 0.8)'],
+                borderColor: 'var(--surface-color)', borderWidth: 2, borderRadius: 4
+              }]
+            },
+            options: {
+              scales: {
+                y: { min: 0, max: 4.5, grid: { color: gridColor }, ticks: { stepSize: 1, color: textColor, callback: val => scoreMap.get(val)?.emoji || '' } },
+                x: { ticks: { color: textColor } }
+              },
+              plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` Average Score: ${ctx.parsed.y.toFixed(2)}` } } }
+            }
+          });
+        },
+        renderHistoryTable() {
+          const { currentPage, itemsPerPage, sortBy, sortOrder } = this.state.historyViewState;
+          let allDays = Object.keys(this.state.moodHistory).map(date => ({ date, am: this.state.moodHistory[date].AM, pm: this.state.moodHistory[date].PM }));
+          allDays.sort((a, b) => sortOrder === 'asc' ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date));
+          const totalPages = Math.ceil(allDays.length / itemsPerPage);
+          const startIndex = (currentPage - 1) * itemsPerPage;
+          const paginatedData = allDays.slice(startIndex, startIndex + itemsPerPage);
+          let tableHTML = `<table class="history-table"><thead><tr>`;
+          const indicator = sortBy === 'date' ? (sortOrder === 'asc' ? '▲' : '▼') : '';
+          tableHTML += `<th data-sort="date" class="${sortBy === 'date' ? 'sort-active' : ''}">Date <span class="sort-indicator">${indicator}</span></th>`;
+          tableHTML += `<th>☀️ Morning</th><th>🌙 Evening</th></tr></thead><tbody>`;
+          if (paginatedData.length === 0) {
+            tableHTML += `<tr><td colspan="3" style="text-align: center; padding: 2rem;">No history found.</td></tr>`;
+          } else {
+            paginatedData.forEach(({ date, am, pm }) => {
+              const hasNotes = (am?.note?.trim()) || (pm?.note?.trim());
+              tableHTML += `
+                <tr class="entry-row" data-action="toggle-notes" data-has-notes="${!!hasNotes}">
+                  <td>${new Date(date + 'T00:00:00').toLocaleDateString(undefined, {weekday: 'short', month: 'short', day: 'numeric'})}</td>
+                  <td class="mood-emoji">${am?.mood || '—'}</td>
+                  <td class="mood-emoji">${pm?.mood || '—'}</td>
+                </tr>`;
+              if (hasNotes) {
+                tableHTML += `
+                  <tr class="notes-row">
+                    <td colspan="3">
+                      <div class="notes-content">
+                        ${am?.note ? `<p><b>☀️ AM:</b> ${am.note.trim()}</p>` : ''}
+                        ${pm?.note ? `<p><b>🌙 PM:</b> ${pm.note.trim()}</p>` : ''}
+                      </div>
+                    </td>
+                  </tr>`;
+              }
+            });
+          }
+          tableHTML += `</tbody></table>`;
+          this.dom.historyBody.innerHTML = tableHTML;
+          let paginationHTML = `
+              <div class="pagination-status">
+                Showing ${startIndex + 1}-${Math.min(startIndex + itemsPerPage, allDays.length)} of ${allDays.length} days
+              </div>
+              <div class="pagination-buttons">
+                <button class="button" data-action="prev-page" ${currentPage === 1 ? 'disabled' : ''}>&larr; Prev</button>
+                <button class="button" data-action="next-page" ${currentPage >= totalPages ? 'disabled' : ''}>Next &rarr;</button>
+              </div>`;
+          this.dom.paginationControls.innerHTML = totalPages > 1 ? paginationHTML : '';
+        },
+  
+        // --- 6. EVENT HANDLING ---
+        addEventListeners() {
+          document.body.addEventListener('click', this.handleDelegatedClick.bind(this));
+          document.body.addEventListener('input', this.handleDelegatedInput.bind(this));
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            window.addEventListener('mousemove', this.handleMouseMove.bind(this));
+          }
+        },
+        handleAction(action, target) {
+          switch(action) {
+            case 'show-history':
+              this.renderHistoryCharts();
+              this.renderHistoryTable();
+              this.dom.historyDialog.showModal();
+              document.body.classList.add('modal-open');
+              break;
+            case 'close-dialog':
+              target.closest('dialog').close();
+              document.body.classList.remove('modal-open');
+              break;
+            case 'consult-ai':
+              this.consultAI();
+              break;
+            case 'import-csv':
+              this.dom.csvImportInput.click();
+              break;
+            case 'export-csv':
+              this.exportData.showPreview();
+              break;
+            case 'confirm-export':
+              this.exportData.downloadCSV();
+              this.dom.csvPreviewDialog.close();
+              document.body.classList.remove('modal-open');
+              break;
+            case 'next-page':
+              this.state.historyViewState.currentPage++;
+              this.renderHistoryTable();
+              break;
+            case 'prev-page':
+              this.state.historyViewState.currentPage--;
+              this.renderHistoryTable();
+              break;
+            case 'toggle-notes': {
+              const row = target.closest('.entry-row');
+              const notesRow = row.nextElementSibling;
+              if (notesRow?.classList.contains('notes-row')) {
+                const isVisible = notesRow.style.display === 'table-row';
+                notesRow.style.display = isVisible ? 'none' : 'table-row';
+                row.classList.toggle('notes-visible', !isVisible);
+              }
+              break;
+            }
+            case 'switch-chart-tab': {
+              const tab = target.dataset.tab;
+              this.state.historyViewState.activeChartTab = tab;
+              this.dom.chartTabsContainer.querySelectorAll('.chart-tabs__button').forEach(btn => btn.classList.remove('active'));
+              target.classList.add('active');
+              this.dom.historyChartsContainer.querySelectorAll('.chart-panel').forEach(panel => panel.classList.remove('active'));
+              document.getElementById(`${tab}-panel`).classList.add('active');
+              this.renderHistoryCharts(); // Re-render to fix sizing
+              break;
+            }
+            case 'toggle-header-controls':
+              document.querySelector('.header-controls').classList.toggle('show');
+              break;
+          }
+        },
+        handleDelegatedClick(e) {
+          const target = e.target;
+          const action = target.closest('[data-action]')?.dataset.action;
+          const date = target.closest('[data-date]')?.dataset.date;
+          const mood = target.closest('[data-mood]')?.dataset.mood;
+          const theme = target.closest('[data-theme]')?.dataset.theme;
+          const sortKey = target.closest('[data-sort]')?.dataset.sort;
+          if (action) this.handleAction(action, target);
+          if (date) { this.state.selectedDate = date; this.renderUI(); }
+          if (mood) this.updateMoodEntry('mood', mood);
+          if (theme) { this.state.theme = theme; this.updateThemeUI(); this.saveState(); }
+          if (sortKey) {
+            if (this.state.historyViewState.sortBy === sortKey) {
+              this.state.historyViewState.sortOrder = this.state.historyViewState.sortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+              this.state.historyViewState.sortBy = sortKey;
+              this.state.historyViewState.sortOrder = 'desc';
+            }
+            this.renderHistoryTable();
+          }
+        },
+        handleDelegatedInput(e) {
+          const target = e.target;
+          if (target === this.dom.datePicker || target.matches('.period-toggle__input')) {
+            this.state.selectedDate = this.dom.datePicker.value;
+            this.state.period = document.querySelector('input[name="period"]:checked').value;
+            this.renderUI();
+          } else if (target === this.dom.moodNote) {
+            this.updateMoodEntry('note', target.value);
+          } else if (target === this.dom.csvImportInput) {
+            this.importData.fromCSV(target.files[0]);
+          }
+        },
+        handleMouseMove(e) {
+          const { clientX, clientY } = e;
+          const { innerWidth, innerHeight } = window;
+          const x = clientX / innerWidth - 0.5;
+          const y = clientY / innerHeight - 0.5;
+          window.requestAnimationFrame(() => {
+            this.dom.blobs.forEach((blob, i) => {
+              const sensitivity = (i + 1) * 15 + 20;
+              blob.style.setProperty('--x', `${-x * sensitivity}px`);
+              blob.style.setProperty('--y', `${-y * sensitivity}px`);
+            });
+          });
+        },
+  
+        // --- 7. HELPER FUNCTIONS ---
+        updateMoodEntry(key, value) {
+          const { selectedDate, period } = this.state;
+          if (!this.state.moodHistory[selectedDate]) this.state.moodHistory[selectedDate] = {};
+          if (!this.state.moodHistory[selectedDate][period]) this.state.moodHistory[selectedDate][period] = {};
+          this.state.moodHistory[selectedDate][period][key] = value;
+          const entry = this.state.moodHistory[selectedDate][period];
+          if (!entry.mood && !entry.note?.trim()) {
+            delete this.state.moodHistory[selectedDate][period];
+            if (Object.keys(this.state.moodHistory[selectedDate]).length === 0) {
+              delete this.state.moodHistory[selectedDate];
+            }
+          }
+          this.saveState();
+          this.renderWeekCalendar();
+          this.renderCurrentMoodEntry();
+        },
+  
+        // --- 8. DATA OPERATIONS ---
+        exportData: {
+          showPreview() {
+            const historyArray = Object.entries(App.state.moodHistory).flatMap(([date, periods]) =>
+              Object.entries(periods).map(([period, data]) => ({ date, period, mood: data.mood || '', note: data.note || '' }))
+            );
+            if (historyArray.length === 0) {
+              alert("No history to export.");
+              return;
+            }
+            historyArray.sort((a,b) => new Date(b.date) - new Date(a.date));
+            App.state.csvData = Papa.unparse(historyArray);
+            const previewData = Papa.unparse(historyArray.slice(0, 10));
+            App.dom.csvPreviewContent.textContent = previewData;
+            App.dom.csvPreviewDialog.showModal();
+            document.body.classList.add('modal-open');
+          },
+          downloadCSV() {
+            if (!App.state.csvData) return;
+            const blob = new Blob([App.state.csvData], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `m00d-matrix-export-${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            App.state.csvData = '';
+          }
+        },
+        importData: {
+          fromCSV(file) {
+            if (!file) return;
+            Papa.parse(file, {
+              header: true, skipEmptyLines: true,
+              complete: (results) => {
+                try {
+                  const newHistory = { ...App.state.moodHistory };
+                  results.data.forEach(row => {
+                    if (row.date && row.period && (row.mood || row.note)) {
+                      if (!newHistory[row.date]) newHistory[row.date] = {};
+                      newHistory[row.date][row.period] = { mood: row.mood, note: row.note };
+                    }
+                  });
+                  App.state.moodHistory = newHistory;
+                  App.saveState();
+                  App.renderUI();
+                  alert(`${results.data.length} rows processed. Your mood history has been updated.`);
+                  App.dom.historyDialog.close();
+                  document.body.classList.remove('modal-open');
+                } catch (error) {
+                  console.error("Error processing CSV:", error);
+                  alert("There was an error processing the CSV file.");
+                }
+              },
+              error: (err) => { alert(`Error parsing CSV file: ${err.message}`); }
+            });
+          }
+        },
+  
+        // --- 9. AI INTEGRATION ---
+        async consultAI() {
+            this.dom.historyDialog.close();
+            this.dom.aiDialog.showModal();
+            
+            // Show the loading animation and hide the response text
+            this.dom.aiLoadingState.style.display = 'flex';
+            this.dom.aiResponseText.style.display = 'none';
+
+            const historyArray = Object.entries(this.state.moodHistory).flatMap(([date, periods]) =>
+              Object.entries(periods).map(([period, data]) => ({ date, period, mood: data.mood || '', note: data.note || '' }))
+            );
+            if (historyArray.length === 0) {
+                this.dom.aiResponseText.innerHTML = "No data found. Please log some moods before consulting with the AI.";
+                this.dom.aiLoadingState.style.display = 'none';
+                this.dom.aiResponseText.style.display = 'block';
+                return;
+            }
+            const csvContent = Papa.unparse(historyArray);
+            const userPrompt = `Analyze my mood data and provide insights.`;
+            const systemContext = `You are an AI assistant specialized in analyzing personal mood data. Your goal is to provide a brief summary of mood patterns, potential insights, and positive, actionable advice based on the user's logged data. The data is provided in CSV format. Your insights should be grounded in the principles of Cognitive Behavioral Therapy (CBT), specifically focusing on how tracking mood can help identify triggers and challenge negative thought patterns. Use the provided CSV data to find patterns (e.g., mood trends by time of day, day of the week, or in relation to notes) and offer encouraging, actionable steps. Keep the response concise and encouraging. The data has columns: "date", "period", "mood", and "note".\n\nCSV Data:\n${csvContent}\n\nAnalysis & Advice:`;
+            const payload = {
+                context: [{ text: systemContext, url: "user-mood-insights" }],
+                user_input: userPrompt
+            };
+            try {
+                const response = await fetch(this.config.aiApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Referer': 'https://orby-obliviocompany.vercel.app/',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                let data;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    data = await response.json();
+                } else {
+                    const textData = await response.text();
+                    try {
+                        data = JSON.parse(textData);
+                    } catch (e) {
+                        data = { result: textData };
+                    }
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                this.dom.aiResponseText.innerHTML = data.ai_response || "I couldn't generate insights at this time. Please try again later.";
+            } catch (error) {
+                console.error('AI consultation failed:', error);
+                this.dom.aiResponseText.innerHTML = `An error occurred: ${error.message}. Please check the console for more details.`;
+            } finally {
+                // Hide the loading animation and show the response text
+                this.dom.aiLoadingState.style.display = 'none';
+                this.dom.aiResponseText.style.display = 'block';
+            }
+        }
+      };
+      App.init();
+    });
+  </script>
+</body>
+</html>
