@@ -1,8 +1,6 @@
 # m00d matrix
 
-![](https://images.squarespace-cdn.com/content/v1/57b5ef68c534a5cc06edc769/1588029625348-N1U1H40H6B4V3V0BGEX6/mood-monitoring?format=2500w)
-
-*Image from: [https://www.calm.com/blog/mood-monitoring](https://www.calm.com/blog/mood-monitoring)*
+![](m00d.png)
 
 -----
 
@@ -29,8 +27,6 @@ Seeing these patterns clearly on a chart or in a journal can help you pinpoint w
 -----
 
 ## Why Should You Track Your Mood?
-
-![](m00d.png)
 
 Regular mood tracking offers several key benefits that can lead to a healthier and more resilient mindset.
 
