@@ -1,0 +1,11 @@
+{
+  "name": "m00d matrix",
+  "short_name": "m00d",
+  "description": "A personal mood tracking app to find your emotional patterns and insights.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#e0f7fa",
+  "theme_color": "#0288d1",
+  "icons": [
+  ]
+}
