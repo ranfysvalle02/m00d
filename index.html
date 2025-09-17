@@ -1598,6 +1598,191 @@
             }
             const csvContent = Papa.unparse(historyArray);
             const userPrompt = `Analyze my mood data and provide insights.`;
+            const guide = `[guide]
+## A Therapist's Guide to Mood & Thought Tracking: From Data Collection to Collaborative Change
+
+Mood and thought tracking is a powerful two-part tool. First, **mood tracking** builds fundamental self-awareness by creating an objective map of a client's emotional world. Second, the structured **thought record** allows us to intervene on that map, actively restructuring the unhelpful thoughts that create distressing emotional states.
+
+This guide provides a framework to help you master both components, turning your client's raw emotional data into therapeutic breakthroughs. The goal is to position yourself as a **collaborative data scientist** alongside your client, using their logs not as a report card, but as a rich dataset to explore, analyze, and use for targeted experiments.
+
+---
+
+### **Part 1: Setting the Foundation**
+
+Before diving into complex issues, ensure the client understands the *why* and the *how*.
+
+1.  **Frame the Mission (The *Why*):** Explain that the goal isn't just to "write stuff down." It's to become a detective of their own mind. "Our emotions can feel overwhelming and mysterious. This process gives us the clues we need. First, we'll track your moods to see the patterns—the *what*, *when*, and *where* of your feelings. Then, we'll use a special tool called a thought record to figure out the *why*."
+
+2.  **Explain the Dual Power: Mood Tracking & Thought Records:**
+    * **Mood Tracking (The Emotional GPS):** This is the foundational layer. It answers: What am I feeling? How strongly? When did it shift? Where was I? Who was I with? What was I doing (or not doing)? Its primary benefit is **building awareness**. It transforms a vague feeling of "I had a bad week" into a specific data point: "My anxiety consistently spikes to an 8/10 on Sunday evenings when I think about the upcoming work week."
+    * **Thought Records (The Diagnostic Engine):** This tool builds on the mood tracking data. It drills down into a specific moment of distress identified by the mood log to answer the crucial question: *Why* did my mood shift so suddenly? What specific thought, or "hot thought," triggered that emotion? Its primary benefit is **enabling change**.
+
+    ***Clinical Tip:*** For clients who are too overwhelmed to start with a full thought record, begin with *only* tracking moods, situations, and activities. This is less intimidating and still yields powerful insights that build motivation for the deeper work.
+
+3.  **Choose the Right Tool (The *How*):** Discuss the options.
+    * **Analog (Pen & Paper):** "The act of writing can be very deliberate and reflective. It forces a pause and helps you process." (Good for clients who are easily distracted or concerned about privacy).
+    * **Digital (Apps):** "An app can be great for convenience and reminders, especially for capturing feelings right in the moment. It also helps us see patterns over time with graphs." (Good for tech-savvy clients who value data visualization).
+
+4.  **Teach the Anatomy of a Thought Record:** Walk them through a blank record using a simple, neutral example first. Emphasize that the "Balanced Thought" is **not** about forced positivity; it's about finding a more realistic, flexible, and helpful perspective.
+
+---
+
+### **Part 2: Clinical Scenarios & Guided Interventions**
+
+Here’s how to apply this two-layered approach to specific, challenging client presentations.
+
+#### **Scenario 1: Depression & Pervasive Low Motivation**
+
+* **The Challenge:** The client feels hopeless and lacks the energy to even fill out the record. Their thoughts are often global and absolute, like "What's the point?" or "I'm a failure."
+* **The Goal:** To break the cycle of inertia by objectively linking small actions to subtle shifts in mood (Behavioral Activation) and challenging all-or-nothing thinking.
+
+* **Initial Mood Tracking Insight:** The client's log might show their mood is consistently a 2/10 in the morning but rises to a 4/10 after they take a shower and a short walk. This objective data is more powerful than a therapist saying, "You'll feel better if you get up." It's the client's own evidence that their actions directly impact their mood, even in a small way. This discovery can be a powerful motivator.
+
+**Example Thought Record:**
+
+| Feature                | Client's Entry                                                                                                                                                                                        |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Situation/Trigger** | Woke up at 10 AM. Stayed in bed scrolling on my phone until noon. Didn't shower or eat.                                                                                                                |
+| **Emotions/Feelings** | Sadness (90%), Guilt (80%), Fatigue (95%), Worthlessness (85%)                                                                                                                                        |
+| **Automatic Thought(s)** | *"I've wasted half the day. I'm so useless and lazy. I'll never get better."* (**Hot Thought:** *I'm useless.*)                                                                                     |
+| **Cognitive Distortions** | All-or-Nothing Thinking, Labeling, Overgeneralization.                                                                                                                                             |
+| **Evidence FOR the Thought** | "I did stay in bed for a long time. I didn't accomplish anything this morning."                                                                                                                  |
+| **Evidence AGAINST the Thought** | "Yesterday I managed to take a short walk. Last week, I paid a bill on time. Being depressed is not the same as being useless; it's an illness. My friend called me for advice the other day." |
+| **Alternative/Balanced Thought** | *"My depression made it very hard to get out of bed today. Lying there made me feel worse, not better. While I'm disappointed, it doesn't define my worth. Maybe I can manage one small thing now."* |
+| **Re-rate Emotions** | Sadness (75%), Guilt (60%), Fatigue (90%), Worthlessness (65%)                                                                                                                                       |
+
+**Therapist's Guide & Key Questions:**
+
+* **Validate the effort:** "Thank you for capturing this. It takes a lot of energy to do this when you're feeling so low. This is incredibly valuable."
+* **Leverage the mood tracking data:** "Last week your mood log showed that on the day you went for that walk, your sadness rating went from an 80% to a 70%. How does that data fit with the thought 'I'll never get better'?"
+* **Connect to Behavioral Activation:** "I see your balanced thought mentions doing one small thing. This is a brilliant hypothesis. Let's use your log to design an experiment. What's one small action we can plan for tomorrow to see if we can shift that 'Worthlessness' rating, even by 5%?"
+
+---
+
+#### **Scenario 2: Social Anxiety & Fear of Judgment**
+
+* **The Challenge:** The client's thoughts are dominated by mind-reading ("Everyone thinks I'm boring") and fortune-telling ("I'm going to say something stupid"). They often avoid social situations, preventing them from ever disproving their fears.
+* **The Goal:** To use mood tracking to identify anticipatory anxiety and to treat anxious thoughts as testable predictions, not facts.
+
+* **Initial Mood Tracking Insight:** The client’s mood log reveals a clear pattern: anxiety begins to spike to a 7/10 every Friday afternoon in anticipation of a Saturday social event. This shows the problem isn't just the event itself, but the hours of worry leading up to it. This discovery makes "anticipatory anxiety" the primary target for intervention.
+
+**Example Thought Record:**
+
+| Feature                | Client's Entry                                                                                                                                                                                            |
+| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Situation/Trigger** | At a work happy hour. My colleague asked me what I did over the weekend.                                                                                                                                  |
+| **Emotions/Feelings** | Anxiety (90%), Awkwardness (85%), Fear (80%). Racing heart.                                                                                                                                               |
+| **Automatic Thought(s)** | *"My weekend was so boring. They're going to think I'm a loser with no life. I need to get out of here."* (**Hot Thought:** *They're going to think I'm a loser.*)                                        |
+| **Cognitive Distortions** | Mind Reading, Catastrophizing, Labeling.                                                                                                                                                                 |
+| **Evidence FOR the Thought** | "My heart was pounding. I felt really awkward. I didn't tell an exciting story."                                                                                                                      |
+| **Evidence AGAINST the Thought** | "She was smiling and nodding when I was talking. She then told me about her own quiet weekend. She didn't run away or call me a loser. She actually asked me a follow-up question."                |
+| **Alternative/Balanced Thought** | *"I feel anxious and assume others are judging me. However, the actual evidence is that my colleague was polite and engaged in a normal conversation. My internal feelings are not visible to others."* |
+| **Re-rate Emotions** | Anxiety (60%), Awkwardness (65%), Fear (50%)                                                                                                                                                              |
+
+**Therapist's Guide & Key Questions:**
+
+* **Separate feeling from fact:** "You felt awkward. That's 100% valid. But is there a difference between *feeling* awkward and *being perceived* as awkward? Let's look at the observable evidence you collected."
+* **Challenge mind-reading:** "If we were in a courtroom, would 'I had a feeling' hold up as evidence? What did you actually *see* and *hear*? Your data shows she smiled and asked a question."
+* **Connect to the mood tracking pattern:** "Remember how your log showed your anxiety was already at a 7/10 before you even left for the party? How might that pre-existing anxiety have influenced your interpretation of this completely normal conversation?"
+
+---
+
+#### **Scenario 3: Relationship Conflict & Anger**
+
+* **The Challenge:** Thoughts are often rigid, blaming, and full of "should" statements ("He should have known I was upset!"). The emotional intensity is high, making objective analysis difficult.
+* **The Goal:** To use mood tracking to identify recurring conflict triggers and to use the thought record to decrease reactivity by revealing the rules and assumptions that fuel anger.
+
+* **Initial Mood Tracking Insight:** After tracking their anger for two weeks, the client notices a stark pattern: their anger spikes to 9/10 almost exclusively between 7-9 PM on weeknights. This simple data point shifts the focus from "my partner is the problem" to "what is happening during that specific time window?" It opens a discussion about fatigue, hunger, and the stress of transitioning from work to home life.
+
+**Example Thought Record:**
+
+| Feature                | Client's Entry                                                                                                                                                                                               |
+| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Situation/Trigger** | My partner said he would take out the trash but he forgot. I came home and it was still there.                                                                                                               |
+| **Emotions/Feelings** | Anger (95%), Frustration (90%), Disappointment (80%)                                                                                                                                                         |
+| **Automatic Thought(s)** | *"He doesn't care about me. This is just another example of how I have to do everything myself. He should have remembered."* (**Hot Thought:** *He doesn't care about me.*)                                   |
+| **Cognitive Distortions** | "Should" Statement, Overgeneralization, Personalization, Mind Reading.                                                                                                                                    |
+| **Evidence FOR the Thought** | "He did forget to do the thing he said he would do."                                                                                                                                                     |
+| **Evidence AGAINST the Thought** | "He made me coffee this morning. He texted me 'I love you' at lunch. Last night he listened to me vent about work for an hour. Forgetting one task is not definitive proof he doesn't care at all." |
+| **Alternative/Balanced Thought** | *"I am really frustrated that the trash wasn't taken out. When he forgets, I interpret it as him not caring. A more balanced view is that he is forgetful sometimes, and it's not a direct reflection of his love for me."* |
+| **Re-rate Emotions** | Anger (60%), Frustration (70%), Disappointment (65%)                                                                                                                                                        |
+
+**Therapist's Guide & Key Questions:**
+
+* **Hunt for the "should":** "'Should' is a powerful word. What's the rule you have in your head that says 'A partner who cares will always remember'? Is that rule 100% fair and realistic?"
+* **Use the mood tracking data to contextualize:** "Our data shows that this time of day is a 'danger zone' for anger for both of you. How much of this anger do you think was about the trash, and how much was about being exhausted and hungry?"
+* **Translate thoughts into needs:** "The thought record beautifully shows how a forgotten chore gets translated into a feeling of being uncared for. How can we use this information to communicate the need directly? For example, 'When I come home tired and see chores undone, I feel overwhelmed and unimportant.'"
+
+---
+
+### **Part 3: Overcoming Common Roadblocks**
+
+* **"I forgot / I was too busy / I didn't feel like it."**
+    * **Strategy:** Lower the barrier. "No problem. Let's aim for just one entry this week. Or, let's start with just mood ratings and what you were doing. No detailed thoughts yet. The goal is building the skill, not creating a perfect diary."
+* **"My mood is always the same. It's just 'bad'."**
+    * **Strategy:** Introduce granularity. "That feeling of being stuck is real. Let's see if we can find the 'flavors' of 'bad.' Is it a 6/10 'bad' or a 9/10 'bad'? Is it a heavy, tired 'bad' or a buzzy, anxious 'bad'? Let's use an emotions wheel to find more specific words. Even a tiny variation gives us a clue to work with."
+* **"My thoughts are true. This isn't helping."**
+    * **Strategy:** Emphasize the "thought vs. fact" distinction and focus on outcomes. "It feels 100% true, I get that. Let's assume for a moment it is. What is the *effect* of believing that thought? Does it help you solve the problem or does it just make you feel worse? Our goal isn't to decide if a thought is true, but whether it's *helpful*."
+* **"I can't identify any thoughts. I just feel bad."**
+    * **Strategy:** Work backward. "That's very common. Let's start with the feeling. You felt a wave of anxiety. Take me back to that exact moment. What was happening? If that feeling had a voice, what would it be saying?"
+
+---
+
+### **Part 4: Leveraging the Data Over Time for Deeper Insight**
+
+Consistent tracking provides a powerful longitudinal dataset. Schedule time every 4-6 weeks to review the data *with* the client.
+
+* **Spotting Trends and Cycles:** "Looking at your mood chart over the past month, we can clearly see a dip in your mood in the days leading up to your monthly performance review. This gives us a specific, predictable target to work on."
+* **Validating Progress & Building Hope:** "Let's pull up your logs from our first month. The data shows you were rating anxiety at 90/100 multiple times a week. This month, your highest rating was a 70, and most days were below 50. The data proves you are building skills and resilience, even on weeks that feel hard." This is a powerful antidote to hopelessness.
+* **Informing Other Interventions:** "Your logs show a clear link between poor sleep and emotional reactivity the next day. This suggests that focusing on sleep hygiene could be one of the most effective things we do."
+* **Identifying Relapse Signatures:** For clients in recovery or managing chronic conditions, the log becomes an early detection system. "We've identified a pattern: when your sleep gets disrupted and you start avoiding social contact, it's often a precursor to a depressive episode. Now that we see the pattern in the data, we can create a proactive plan for when you spot those early warning signs."
+
+Of course. Here is a section on strategies to improve mood using the data gathered from mood tracking.
+
+***
+
+### **APPENDIX: From Data to Action: Proactive Mood Improvement Strategies**
+
+Once a client has consistently tracked their moods, you have a baseline dataset. The next step is to use this data not just for insight, but as a launchpad for targeted behavioral experiments designed to actively improve their mood. This transforms the client from a passive observer of their feelings into an active agent of change.
+
+---
+
+#### **Strategy 1: Identify and Schedule "Mood Boosters"**
+
+The log doesn't just capture what feels bad; it also reveals what works. Even small positive shifts are crucial data points.
+
+* **The Technique:** Guide the client to scan their mood logs like a detective looking for "bright spots." These are activities, places, people, or even times of day that correlate with a lift in mood—even if it's just from a 2/10 to a 4/10. These are their unique, evidence-based "mood boosters."
+* **Therapist's Guide & Key Questions:**
+    * "Let's review your log from last week. Where do we see the highest numbers? I notice your mood rating ticked up to a 6 after your morning walk on Tuesday and again on Friday after you called your sister. What does this data tell us?"
+    * "Based on this evidence you've collected, listening to that true-crime podcast while you do chores seems to consistently make you feel more engaged. That's a powerful discovery."
+    * **The Experiment:** "Our mission for this week is to conduct an experiment. Let's intentionally schedule two 'mood boosters' from your list into your calendar. We'll treat it like a prescription and track the data to see if it has the effect we predict."
+
+---
+
+#### **Strategy 2: Uncover and Problem-Solve "Mood Crashers"**
+
+Conversely, the data will reveal predictable patterns of what makes the client feel worse. These are the "mood crashers" that can be anticipated and managed.
+
+* **The Technique:** Work with the client to identify the most reliable triggers for mood dips. Is it checking social media first thing in the morning? Is it the Sunday evening dread? Is it skipping lunch?
+* **Therapist's Guide & Key Questions:**
+    * "The data is very clear. In the last three weeks, your mood has dropped significantly within an hour of having a long phone call with your mother. This isn't a judgment; it's a data point. What can we do with this information?"
+    * "We know from your log that your frustration peaks around 4 PM when you're tired and hungry. This 'crasher' is predictable. What's one small thing we could do *before* it hits? Could we experiment with a healthy snack at 3:30 PM?"
+    * **The Experiment:** "Instead of just waiting for the 'Sunday Scaries' to hit, let's try to disrupt the pattern. What if this Sunday at 7 PM—right when the anxiety usually starts—we schedule 30 minutes for you to plan your week so you feel more in control, followed by watching a movie you love?"
+
+---
+
+#### **Strategy 3: Use Positive Data as an Antidote to Negative Thoughts**
+
+The mood log is the client's own irrefutable evidence against the absolute, all-or-nothing statements that depression and anxiety thrive on.
+
+* **The Technique:** When a client voices a global negative belief (e.g., "I'm always miserable," "Nothing ever goes right"), use their own log as gentle, objective counter-evidence.
+* **Therapist's Guide & Key Questions:**
+    * **Client:** "This was another awful week. I felt terrible the whole time."
+    * **Therapist:** "It sounds like it felt incredibly long and difficult. Let's honor that feeling. Can we also look at the data you collected? I see on Wednesday you logged 'Contentment (60%)' while you were gardening. Tell me about that moment. How does that data fit with the thought that the *whole* week was terrible?"
+    * "You said, 'I'm a failure who can't get anything done.' That's a powerful thought. Let's look at your log. On Monday, you tracked that you successfully paid three bills, and you rated your feeling as 'Relief (70%).' This is a piece of data showing you *did* accomplish something important. Let's hold both: the *feeling* of being a failure and the *fact* that you were productive."
+
+
+[/guide]`;
             const systemContext = `You are an AI assistant specialized in analyzing personal mood data. Your goal is to provide a brief summary of mood patterns, potential insights, and positive, actionable advice based on the user's logged data. The data is provided in CSV format. Your insights should be grounded in the principles of Cognitive Behavioral Therapy (CBT), specifically focusing on how tracking mood can help identify triggers and challenge negative thought patterns. Use the provided CSV data to find patterns (e.g., mood trends by time of day, day of the week, or in relation to notes) and offer encouraging, actionable steps. Keep the response concise and encouraging. The data has columns: "date", "period", "mood", and "note".\n\nCSV Data:\n${csvContent}\n\nAnalysis & Advice:`;
             const payload = {
                 context: [{ text: systemContext, url: "user-mood-insights" }],
