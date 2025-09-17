@@ -40,12 +40,13 @@ Regular mood tracking offers several key benefits that can lead to a healthier a
 
 ## AI Mood Insights Example
 
+![](m00demo.png)
+
 ![](demo.png)
 
+"Based on your mood data, it looks like your moods are quite variable between morning and evening. You often feel 😖 in the mornings but switch to more positive moods like 😌 or 😎 later in the day. This pattern shows that mornings might be challenging for you, which is common.
 
-"Based on your mood data, an analysis might find that your mood varies throughout the day. For example, in the mornings of September 15, you may have felt quite low but improved significantly by the afternoon. On September 16, your morning was also tough, but you felt better in the evening.
-
-This suggests that mornings may be challenging for you. Consider starting your day with a positive routine or small activities that bring you joy. Tracking your mood can help you identify patterns and triggers, allowing you to focus on activities that lift your spirits. Keep up the good work."
+To improve your mornings, try starting with a small, positive activity, like listening to your favorite song or doing a quick stretching exercise. Tracking these changes can help you understand what boosts your mood. Keep up the good work, and remember that small changes can lead to better days!"
 
 -----
 
