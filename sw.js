@@ -1,4 +1,4 @@
-const CACHE_NAME = 'm00d-matrix-v1-2025-09-18';
+const CACHE_NAME = 'm00d-matrix-v1-2025-09-19';
 const urlsToCache = [
   './',
   './index.html',
