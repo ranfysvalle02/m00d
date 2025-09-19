@@ -552,6 +552,16 @@
       display: grid;
       grid-template-rows: auto auto 1fr auto;
     }
+
+    /* FIX: Add this new rule below the one above */
+    #ai-dialog[open] {
+      /* This targets the AI dialog specifically.
+          It sets a 3-row grid that correctly matches its 3 children (header, body, footer).
+          Using 'auto' for the body row makes it only as tall as its content,
+          preventing the dialog from stretching unnecessarily. */
+      grid-template-rows: auto auto auto;
+    }
+    
     .dialog__header, .dialog__body, .dialog__footer { padding: 1rem 1.5rem; }
     @media (min-width: 900px) {
       .dialog__header, .dialog__body, .dialog__footer { padding: 1.5rem 2rem; }
